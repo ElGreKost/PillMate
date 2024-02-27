@@ -1,0 +1,20 @@
+import '../../../core/app_export.dart';
+
+/// This class is used in the [view1_item_widget] screen.
+class View1ItemModel {
+  View1ItemModel({
+    this.pill,
+    this.pill1,
+    this.id,
+  }) {
+    pill = pill ?? "Pill";
+    pill1 = pill1 ?? "Pill";
+    id = id ?? "";
+  }
+
+  String? pill;
+
+  String? pill1;
+
+  String? id;
+}
