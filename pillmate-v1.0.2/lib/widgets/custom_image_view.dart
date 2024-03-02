@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+//  todo images don't work
 class CustomImageView extends StatelessWidget {
   ///[imagePath] is required parameter for showing image
   String? imagePath;

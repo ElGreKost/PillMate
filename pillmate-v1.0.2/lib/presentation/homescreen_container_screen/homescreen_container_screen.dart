@@ -4,31 +4,26 @@ import 'package:pillmate/widgets/custom_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pillmate/core/app_export.dart';
 
+import '../../widgets/bottom_navigation_bar.dart';
+
 // ignore_for_file: must_be_immutable
 class HomescreenContainerScreen extends StatelessWidget {
   HomescreenContainerScreen({Key? key}) : super(key: key);
-
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            body: Navigator(
-                key: navigatorKey,
-                initialRoute: AppRoutes.homescreenPage,
-                onGenerateRoute: (routeSetting) => PageRouteBuilder(
-                    pageBuilder: (ctx, ani, ani1) =>
-                        getCurrentPage(routeSetting.name!),
-                    transitionDuration: Duration(seconds: 0))),
-            bottomNavigationBar: _buildBottomBar(context)));
-  }
-
-  /// Section Widget
-  Widget _buildBottomBar(BuildContext context) {
-    return CustomBottomBar(onChanged: (BottomBarEnum type) {
-      Navigator.pushNamed(navigatorKey.currentContext!, getCurrentRoute(type));
-    });
+            // body: Navigator(
+            //     key: navigatorKey,
+            //     initialRoute: AppRoutes.homescreenPage,
+            //     onGenerateRoute: (routeSetting) => PageRouteBuilder(
+            //         pageBuilder: (ctx, ani, ani1) =>
+            //             getCurrentPage(routeSetting.name!),
+            //         transitionDuration: Duration(seconds: 0))),
+            bottomNavigationBar: GNavWidget()
+        )
+    );
   }
 
   ///Handling route based on bottom click actions

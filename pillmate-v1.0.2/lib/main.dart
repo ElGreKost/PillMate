@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/scheduler.dart';
 import 'core/app_export.dart';
+import 'package:provider/provider.dart';
+import 'backend/app_state.dart'; // Make sure to import your NavigationModel file
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  WidgetsFlutterBinding.ensureInitialized(); // Used for QueryData or whatever it's called
 
-  ///Please update theme as per your need if required.
   ThemeHelper().changeTheme('primary');
   runApp(MyApp());
 }
@@ -18,16 +14,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return MaterialApp(
-          theme: theme,
-          title: 'pillmate',
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.homescreenContainerScreen,
-          routes: AppRoutes.routes,
-        );
-      },
+    return ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MaterialApp(
+            theme: theme,
+            title: 'pillmate',
+            debugShowCheckedModeBanner: false,
+            initialRoute: AppRoutes.homescreenPage,
+            routes: AppRoutes.routes,
+          );
+        },
+      ),
     );
   }
 }
