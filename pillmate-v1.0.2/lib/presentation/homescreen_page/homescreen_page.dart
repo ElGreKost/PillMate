@@ -43,9 +43,7 @@ class HomescreenPage extends StatelessWidget {
           ])),
       bottomNavigationBar: GNavWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement button to add pill
-        },
+        onPressed: () => Navigator.pushNamed(context, AppRoutes.selectDayScreen),
         child: Icon(Icons.add, color: Colors.white, size: 35.v),
         backgroundColor: appTheme.cyan400,
 

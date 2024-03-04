@@ -16,8 +16,8 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
   String pillName = "Acetaminophen";
 
   double calculateFillRatio() {
-    final DateTime now = DateTime.now();
-    scheduledTime = DateTime(now.year, now.month, now.day, 6, 0);
+    final DateTime now = DateTime.now();// todo fix it
+    scheduledTime = DateTime(now.year, now.month, now.day, 17, 0);
     final DateTime startTime = scheduledTime.subtract(Duration(hours: 12)); // 12 hours before the scheduled time
 
     if (now.isBefore(startTime)) {

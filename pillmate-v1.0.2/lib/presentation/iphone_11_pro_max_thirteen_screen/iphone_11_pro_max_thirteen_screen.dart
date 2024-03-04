@@ -229,6 +229,6 @@ class Iphone11ProMaxThirteenScreen extends StatelessWidget {
 
   /// Navigates to the choosedayScreen when the action is triggered.
   onTapNext(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.choosedayScreen);
+    Navigator.pushNamed(context, AppRoutes.chooseDayScreen);
   }
 }

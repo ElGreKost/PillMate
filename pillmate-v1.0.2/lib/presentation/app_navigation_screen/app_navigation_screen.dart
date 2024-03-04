@@ -28,7 +28,7 @@ class AppNavigationScreen extends StatelessWidget {
                         _buildScreenTitle(
                           context,
                           screenTitle: "Homescreen - Container",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.homescreenContainerScreen),
+                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.homescreenPage),
                         ),
                         _buildScreenTitle(
                           context,
@@ -48,12 +48,12 @@ class AppNavigationScreen extends StatelessWidget {
                         _buildScreenTitle(
                           context,
                           screenTitle: "Frequency",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.frequencyScreen),
+                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectFrequencyScreen),
                         ),
                         _buildScreenTitle(
                           context,
                           screenTitle: "ChooseDay",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.choosedayScreen),
+                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.chooseDayScreen),
                         ),
                         _buildScreenTitle(
                           context,
@@ -93,7 +93,7 @@ class AppNavigationScreen extends StatelessWidget {
                         _buildScreenTitle(
                           context,
                           screenTitle: "iPhone 11 Pro Max - Fourteen",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxFourteenScreen),
+                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectDayScreen),
                         ),
                         _buildScreenTitle(
                           context,

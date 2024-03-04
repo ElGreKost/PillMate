@@ -8,7 +8,7 @@ import 'widgets/chooseday_item_widget.dart';
 import 'package:pillmate/widgets/custom_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pillmate/core/app_export.dart';
-
+// todo this is not the choose day screen xD
 // ignore_for_file: must_be_immutable
 class ChoosedayScreen extends StatelessWidget {
   ChoosedayScreen({Key? key}) : super(key: key);
@@ -180,6 +180,6 @@ class ChoosedayScreen extends StatelessWidget {
 
   /// Navigates to the iphone11ProMaxFourteenScreen when the action is triggered.
   onTapView(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxFourteenScreen);
+    Navigator.pushNamed(context, AppRoutes.selectDayScreen);
   }
 }

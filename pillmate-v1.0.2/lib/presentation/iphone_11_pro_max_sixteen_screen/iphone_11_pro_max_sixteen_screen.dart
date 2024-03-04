@@ -236,7 +236,7 @@ class Iphone11ProMaxSixteenScreen extends StatelessWidget {
 
   /// Navigates to the iphone11ProMaxFourteenScreen when the action is triggered.
   onTapImgArrowDown(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxFourteenScreen);
+    Navigator.pushNamed(context, AppRoutes.selectDayScreen);
   }
 
   /// Navigates to the settimeScreen when the action is triggered.

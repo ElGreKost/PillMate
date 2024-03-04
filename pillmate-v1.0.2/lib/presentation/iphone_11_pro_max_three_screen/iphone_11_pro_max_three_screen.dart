@@ -177,7 +177,7 @@ class Iphone11ProMaxThreeScreen extends StatelessWidget {
 
   /// Navigates to the homescreenContainerScreen when the action is triggered.
   onTapImgArrowDown(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.homescreenContainerScreen);
+    Navigator.pushNamed(context, AppRoutes.homescreenPage);
   }
 
   /// Navigates to the iphone11ProMaxFiveScreen when the action is triggered.
