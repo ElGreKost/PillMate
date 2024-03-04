@@ -6,6 +6,8 @@ class AppState with ChangeNotifier {
   String _activeRoute = AppRoutes.homescreenPage;
   List<String> navRoutes = [AppRoutes.homescreenPage, AppRoutes.settingsScreen];
 
+  var delete_me_github_test = 10;
+
 
   int get navIdx => _navIdx;
   String get activeRoute => _activeRoute;
