@@ -32,43 +32,8 @@ class AppNavigationScreen extends StatelessWidget {
                         ),
                         _buildScreenTitle(
                           context,
-                          screenTitle: "AddMedication",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.addmedicationScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "Frequency",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectFrequencyScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "ChooseDay",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.chooseDayScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "TimeOfDay",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.timeofdayScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "SetTime",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectTimeScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "AddPill",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.addpillScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
                           screenTitle: "Settings",
                           onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.settingsScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "iPhone 11 Pro Max - Fourteen",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectDayScreen),
                         ),
                       ],
                     ),

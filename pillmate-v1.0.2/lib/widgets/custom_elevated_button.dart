@@ -15,7 +15,7 @@ class CustomElevatedButton extends BaseButton {
     TextStyle? buttonTextStyle,
     bool? isDisabled,
     double? height,
-    double? width = 100,
+    double? width,
     required String text,
   }) : super(
           text: text,
