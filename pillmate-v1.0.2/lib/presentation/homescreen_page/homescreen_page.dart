@@ -43,7 +43,7 @@ class HomescreenPage extends StatelessWidget {
           ])),
       bottomNavigationBar: GNavWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.selectDayScreen),
+        onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
         child: Icon(Icons.add, color: Colors.white, size: 35.v),
         backgroundColor: appTheme.cyan400,
 
