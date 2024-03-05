@@ -66,7 +66,7 @@ class _SelectDayScreenState extends State<SelectDayScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   print('Selected days: $_selectedDays');
-                  Navigator.pushNamed(context, AppRoutes.selectMedicationTypeScreen);
+                  Navigator.pushNamed(context, AppRoutes.selectMealTimeScreen);
                 },
                 child: Text('Next'),
               ),

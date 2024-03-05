@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:pillmate/core/app_export.dart';
+import 'package:pillmate/widgets/cutom_text_field.dart';
 
 import '../../theme/theme_helper.dart';
+import '../../widgets/custom_elevated_button.dart';
 
 class SelectPillName extends StatefulWidget {
   @override
@@ -9,6 +12,8 @@ class SelectPillName extends StatefulWidget {
 }
 
 class _SelectPillNameState extends State<SelectPillName> {
+  var pillNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,24 +28,16 @@ class _SelectPillNameState extends State<SelectPillName> {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
-                TextField(
-                  decoration: InputDecoration(
-                    // filled: true,
-                    //   fillColor: Colors.white,
-                    labelText: 'Medication Name',
-                    focusColor: appTheme.cyan400,
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
-
-                    hintStyle: TextStyle(color: appTheme.cyan400), // Adjust color to match the theme
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: appTheme.cyan400, width: 2, style: BorderStyle.solid),
-                      borderRadius: BorderRadius.all(Radius.circular(30)), // Adjust radius to match the picture
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 18), // Adjust padding to match the picture
-                  ),
+                CustomTextField(
+                    controller: pillNameController,
+                    name: "Medication Name",
+                    prefixIcon: LineIcons.pills,
+                    inputType: TextInputType.text),
+                CustomElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, AppRoutes.selectMedicationTypeScreen),
+                  text: 'Next',
+                  width: 100.h,
                 ),
-                ElevatedButton(onPressed: () => Navigator.pushNamed(context, AppRoutes.selectMedicationTypeScreen), child: Text('Next'))
               ]),
             )));
   }

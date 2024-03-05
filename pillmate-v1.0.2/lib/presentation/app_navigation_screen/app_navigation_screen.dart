@@ -37,16 +37,6 @@ class AppNavigationScreen extends StatelessWidget {
                         ),
                         _buildScreenTitle(
                           context,
-                          screenTitle: "iPhone 11 Pro Max - Three",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxThreeScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "iPhone 11 Pro Max - Five",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxFiveScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
                           screenTitle: "Frequency",
                           onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectFrequencyScreen),
                         ),
@@ -72,33 +62,13 @@ class AppNavigationScreen extends StatelessWidget {
                         ),
                         _buildScreenTitle(
                           context,
-                          screenTitle: "iPhone 11 Pro Max - Thirty",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxThirtyScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "iPhone 11 Pro Max - Thirteen",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxThirteenScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
                           screenTitle: "Settings",
                           onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.settingsScreen),
                         ),
                         _buildScreenTitle(
                           context,
-                          screenTitle: "iPhone 11 Pro Max - Six",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxSixScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
                           screenTitle: "iPhone 11 Pro Max - Fourteen",
                           onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectDayScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
-                          screenTitle: "iPhone 11 Pro Max - Sixteen",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.iphone11ProMaxSixteenScreen),
                         ),
                       ],
                     ),

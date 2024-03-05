@@ -20,7 +20,6 @@ class AddpillScreen extends StatelessWidget {
                           padding: EdgeInsets.all(2.h),
                           alignment: Alignment.centerRight,
                           onTap: () {
-                            onTapBtnIconButton(context);
                           },
                           child: CustomImageView(
                               imagePath: ImageConstant.imgXCircle))),
@@ -97,10 +96,5 @@ class AddpillScreen extends StatelessWidget {
                                 ]))
                       ]))
                 ]))));
-  }
-
-  /// Navigates to the iphone11ProMaxThreeScreen when the action is triggered.
-  onTapBtnIconButton(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxThreeScreen);
   }
 }

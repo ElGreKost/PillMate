@@ -1,5 +1,4 @@
 import 'package:pillmate/presentation/homescreen_page/homescreen_page.dart';
-import 'package:pillmate/presentation/iphone_11_pro_max_twentysix_page/iphone_11_pro_max_twentysix_page.dart';
 import 'package:pillmate/widgets/app_bar/custom_app_bar.dart';
 import 'package:pillmate/widgets/app_bar/appbar_leading_iconbutton.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title.dart';
@@ -125,9 +124,7 @@ class TimeofdayScreen extends StatelessWidget {
                     itemCount: 7,
                     itemBuilder: (context, index) {
                       return TimeofdayItemWidget(onTapView: () {
-                        onTapView(context);
                       }, onTapView1: () {
-                        onTapView1(context);
                       });
                     }))));
   }
@@ -146,8 +143,6 @@ class TimeofdayScreen extends StatelessWidget {
         return AppRoutes.homescreenPage;
       case BottomBarEnum.Guide:
         return "/";
-      case BottomBarEnum.Medications:
-        return AppRoutes.iphone11ProMaxTwentysixPage;
       case BottomBarEnum.Profile:
         return "/";
       default:
@@ -160,20 +155,8 @@ class TimeofdayScreen extends StatelessWidget {
     switch (currentRoute) {
       case AppRoutes.homescreenPage:
         return HomescreenPage();
-      case AppRoutes.iphone11ProMaxTwentysixPage:
-        return Iphone11ProMaxTwentysixPage();
       default:
         return DefaultWidget();
     }
-  }
-
-  /// Navigates to the iphone11ProMaxSixteenScreen when the action is triggered.
-  onTapView(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxSixteenScreen);
-  }
-
-  /// Navigates to the iphone11ProMaxSixteenScreen when the action is triggered.
-  onTapView1(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxSixteenScreen);
   }
 }

@@ -98,12 +98,6 @@ class SettingsScreen extends StatelessWidget {
             imagePath: ImageConstant.imgCloseTealA200,
             margin: EdgeInsets.fromLTRB(28.h, 12.v, 354.h, 12.v),
             onTap: () {
-              onTapClose(context);
             }));
-  }
-
-  /// Navigates to the iphone11ProMaxThreeScreen when the action is triggered.
-  onTapClose(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.iphone11ProMaxThreeScreen);
   }
 }
