@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pillmate/presentation/homescreen_page/homescreen_page.dart';
 import '../presentation/experimenting.dart';
 import '../presentation/addmedication_screen/addmedication_screen.dart';
+import '../presentation/modern_select_day.dart';
 import '../presentation/select_frequency_screen/select_frequency_screen.dart';
 import '../presentation/chooseday_screen/chooseday_screen.dart';
 import '../presentation/select_meal_time/select_meal_time.dart';
 import '../presentation/select_medication_type_screen/select_medication_type_screen.dart';
 import '../presentation/select_pill_name/select_pill_name.dart';
 import '../presentation/timeofday_screen/timeofday_screen.dart';
-import '../presentation/set_time_screen/set_time_screen.dart';
+import '../presentation/select_time_screen/select_time_screen.dart';
 import '../presentation/addpill_screen/addpill_screen.dart';
 import '../presentation/settings_screen/settings_screen.dart';
 import '../presentation/select_day_screen/select_day_screen.dart';
@@ -27,7 +28,7 @@ class AppRoutes {
 
   static const String timeofdayScreen = '/timeofday_screen';
 
-  static const String settimeScreen = '/settime_screen';
+  static const String selectTimeScreen = '/select_time_screen';
 
   static const String addpillScreen = '/addpill_screen';
 
@@ -43,6 +44,8 @@ class AppRoutes {
 
   static const String selectMealTimeScreen = '/select_meal_time';
 
+  static const String modernSelectDay = '/modern_select_day';
+
   static Map<String, WidgetBuilder> routes = {
     homescreenPage: (context) => HomescreenPage(),
     addmedicationScreen: (context) => AddmedicationScreen(),
@@ -50,7 +53,7 @@ class AppRoutes {
     selectFrequencyScreen: (context) => SelectFrequencyScreen(),
     chooseDayScreen: (context) => ChoosedayScreen(),
     timeofdayScreen: (context) => TimeofdayScreen(),
-    // settimeScreen: (context) => SettimeScreen(),
+    selectTimeScreen: (context) => SelectTimeScreen(),
     addpillScreen: (context) => AddpillScreen(),
     settingsScreen: (context) => SettingsScreen(),
     selectPillName: (context) => SelectPillName(),
@@ -58,5 +61,6 @@ class AppRoutes {
     selectMealTimeScreen: (context) => SelectMealTimeScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
     experimentingScreen: (context) => ExperimentingScreen(),
+    modernSelectDay: (context) => ModernSelectDay()
   };
 }

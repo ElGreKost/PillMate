@@ -53,7 +53,7 @@ class AppNavigationScreen extends StatelessWidget {
                         _buildScreenTitle(
                           context,
                           screenTitle: "SetTime",
-                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.settimeScreen),
+                          onTapScreenTitle: () => onTapScreenTitle(context, AppRoutes.selectTimeScreen),
                         ),
                         _buildScreenTitle(
                           context,

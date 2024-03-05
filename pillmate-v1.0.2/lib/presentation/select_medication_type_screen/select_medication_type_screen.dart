@@ -61,7 +61,7 @@ class _SelectMedicationTypeScreenState extends State<SelectMedicationTypeScreen>
               child: ElevatedButton(
                 onPressed: () {
                   print('Selected medication type: $_selectedMedicationType');
-                  Navigator.pushNamed(context, AppRoutes.selectFrequencyScreen);
+                  Navigator.pushNamed(context, AppRoutes.modernSelectDay);
 
                 },
                 child: Text('Next'),

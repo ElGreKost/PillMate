@@ -59,11 +59,10 @@ class _SelectMealTimeScreenState extends State<SelectMealTimeScreen> {
                       .toList(),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.selectFrequencyScreen),
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.selectTimeScreen),
                       child: Text('Next'),
                     ),
                   )
-
                 ],
               ),
             ),
