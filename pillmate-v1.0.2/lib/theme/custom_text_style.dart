@@ -8,7 +8,7 @@ import '../core/app_export.dart';
 class CustomTextStyles {
   // Body text style
   static get bodyMediumGray900 => theme.textTheme.bodyMedium!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.grey500,
       );
   // Headline text style
   static get headlineLarge30 => theme.textTheme.headlineLarge!.copyWith(
@@ -18,17 +18,17 @@ class CustomTextStyles {
         fontWeight: FontWeight.w700,
       );
   static get headlineSmallGray900 => theme.textTheme.headlineSmall!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.grey500,
         fontSize: 25.fSize,
       );
   static get headlineSmallGray900Bold =>
       theme.textTheme.headlineSmall!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.grey500,
         fontSize: 25.fSize,
         fontWeight: FontWeight.w700,
       );
   static get headlineSmallTealA200 => theme.textTheme.headlineSmall!.copyWith(
-        color: appTheme.tealA200,
+        color: appTheme.teal500,
         fontWeight: FontWeight.w700,
       );
   // Title text style
@@ -40,13 +40,13 @@ class CustomTextStyles {
         fontSize: 20.fSize,
       );
   static get titleMediumGray900 => theme.textTheme.titleMedium!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.grey500,
       );
   static get titleMediumGray900_1 => theme.textTheme.titleMedium!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.grey500,
       );
   static get titleMediumTealA200 => theme.textTheme.titleMedium!.copyWith(
-        color: appTheme.tealA200,
+        color: appTheme.teal500,
       );
 }
 

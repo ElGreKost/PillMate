@@ -87,8 +87,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget textFormFieldWidget(BuildContext context) => SizedBox(
         width: width ?? double.maxFinite,
         child: TextFormField(
-          scrollPadding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           controller: controller,
           focusNode: focusNode ?? FocusNode(),
           autofocus: autofocus!,
@@ -101,6 +100,7 @@ class CustomTextFormField extends StatelessWidget {
           validator: validator,
         ),
       );
+
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.titleLarge20,
@@ -110,31 +110,22 @@ class CustomTextFormField extends StatelessWidget {
         suffixIconConstraints: suffixConstraints,
         isDense: true,
         contentPadding: contentPadding ?? EdgeInsets.all(18.h),
-        fillColor: fillColor ?? appTheme.gray900,
+        fillColor: fillColor ?? appTheme.grey500,
         filled: filled,
         border: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.h),
-              borderSide: BorderSide(
-                color: appTheme.tealA200,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: appTheme.teal500, width: 1),
             ),
         enabledBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.h),
-              borderSide: BorderSide(
-                color: appTheme.tealA200,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: appTheme.teal500, width: 1),
             ),
         focusedBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.h),
-              borderSide: BorderSide(
-                color: appTheme.tealA200,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: appTheme.teal500, width: 1),
             ),
       );
 }

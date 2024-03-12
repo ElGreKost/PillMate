@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var outlineInputBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: appTheme.cyan400),
+      borderSide: BorderSide(color: appTheme.cyan500),
       borderRadius: BorderRadius.all(Radius.circular(20)),
     );
     return Container(
@@ -39,11 +39,11 @@ class CustomTextField extends StatelessWidget {
           textAlign: TextAlign.start,
           style: TextStyle(color: appTheme.whiteA700, fontSize: 16),
           decoration: InputDecoration(
-            prefixIcon: Icon(prefixIcon, color: appTheme.tealA200),
+            prefixIcon: Icon(prefixIcon, color: appTheme.teal500),
             isDense: true,
             labelText: name,
             counterText: "",
-            labelStyle: TextStyle(color: appTheme.cyan400),
+            labelStyle: TextStyle(color: appTheme.cyan500),
             border: outlineInputBorder,
             focusedBorder: outlineInputBorder,
             enabledBorder: outlineInputBorder,

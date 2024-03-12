@@ -25,11 +25,12 @@ class AppbarTitleButton extends StatelessWidget {
       child: Padding(
         padding: margin ?? EdgeInsets.zero,
         child: CustomElevatedButton(
-          height: 24.v,
-          width: 108.h,
-          text: "BOOK  APPOINTMENT",
-          buttonStyle: CustomButtonStyles.fillCyan,
-          buttonTextStyle: theme.textTheme.labelSmall!,
+            height: 24.v,
+            width: 108.h,
+            text: "BOOK  APPOINTMENT",
+            buttonStyle: CustomButtonStyles.fillCyan,
+            buttonTextStyle: theme.textTheme.labelSmall!,
+        onPressed: () => print(Colors.blueGrey.toString()),
         ),
       ),
     );

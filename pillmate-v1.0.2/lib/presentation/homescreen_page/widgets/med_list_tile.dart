@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:pillmate/core/app_export.dart'; // Adjust the import paths as necessary.
+import 'package:pillmate/core/app_export.dart';
+import 'package:pillmate/services/medication_data_provider.dart';
+import 'package:provider/provider.dart';
 
-class EventlistItemWidget extends StatefulWidget {
-  const EventlistItemWidget({Key? key}) : super(key: key);
+import '../../../backend/app_state.dart';
+import '../../../services/medication.dart'; // Adjust the import paths as necessary.
+
+class MedListTile extends StatefulWidget {
+  final Medication medication;
+
+  const MedListTile({Key? key, required this.medication}) : super(key: key);
 
   @override
-  _EventlistItemWidgetState createState() => _EventlistItemWidgetState();
+  _MedListTileState createState() => _MedListTileState();
 }
 
-class _EventlistItemWidgetState extends State<EventlistItemWidget> {
+class _MedListTileState extends State<MedListTile> {
   bool _isLongPressed = false;
-  late DateTime scheduledTime;
-  String pillName = "Acetaminophen";
 
-  double calculateFillRatio() {
-    final DateTime now = DateTime.now();// todo fix it
-    scheduledTime = DateTime(now.year, now.month, now.day, 17, 0);
+  double calculateFillRatio(DateTime scheduledTime) {
+    final DateTime now = DateTime.now();
     final DateTime startTime = scheduledTime.subtract(Duration(hours: 12)); // 12 hours before the scheduled time
 
     if (now.isBefore(startTime)) {
@@ -45,9 +49,10 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
       ),
     );
   }
+
   Widget _buildDefaultView() {
-    final double fillRatio = calculateFillRatio();
-    final Color fillColor = appTheme.cyan400; // Use a primary theme color for fill
+    final double fillRatio = calculateFillRatio(widget.medication.scheduledTime);
+    final Color fillColor = appTheme.cyan500; // Use a primary theme color for fill
 
     return Container(
       key: ValueKey('defaultView'),
@@ -60,10 +65,8 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
               child: FractionallySizedBox(
                 widthFactor: fillRatio,
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: fillColor.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(30.h)
-                  ),
+                  decoration:
+                      BoxDecoration(color: fillColor.withOpacity(0.5), borderRadius: BorderRadius.circular(30.h)),
                 ),
               ),
             ),
@@ -73,7 +76,7 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.h),
-                child: Icon(LineIcons.pills, size: 48.h, color: appTheme.cyan400),
+                child: Icon(widget.medication.icon, size: 48.h, color: appTheme.cyan500),
               ),
               Expanded(
                 child: Padding(
@@ -81,10 +84,12 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(DateFormat('h:mm a').format(scheduledTime) , style: TextStyle(fontSize: 12.v, color: Colors.grey)),
-                      Text(pillName, style: CustomTextStyles.headlineSmallBold),
+                      Text(DateFormat('h:mm a').format(widget.medication.scheduledTime),
+                          style: TextStyle(fontSize: 12.v, color: Colors.grey)),
+                      Text(widget.medication.name, style: CustomTextStyles.headlineSmallBold),
                       SizedBox(height: 4.v),
-                      Text("1 Pill \t Before Food", style: theme.textTheme.titleMedium),
+                      Text("1 ${widget.medication.kind} \t ${widget.medication.betweenMeals}",
+                          style: theme.textTheme.titleMedium),
                     ],
                   ),
                 ),
@@ -96,7 +101,6 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
     );
   }
 
-
   Widget _buildLongPressView() {
     return Container(
       key: ValueKey('longPressView'), // Unique key for AnimatedSwitcher
@@ -107,14 +111,14 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
           // Pill name for verification
           Padding(
             padding: EdgeInsets.only(bottom: 8.v), // Add some space below the pill name
-            child: Text(pillName, style: TextStyle(fontSize: 18.h, fontWeight: FontWeight.bold)),
+            child: Text(widget.medication.name, style: TextStyle(fontSize: 18.h, fontWeight: FontWeight.bold)),
           ),
           // Scrollable row for actions
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Center the icons in the row
               children: [
                 _buildIconButton(Icons.check_circle, "Take", Colors.green, () {
-                  // Handle "Take" action
+                  Provider.of<AppState>(context, listen: false).deleteMedication(widget.medication);
                 }),
                 SizedBox(width: 16.h),
                 _buildIconButton(Icons.edit, "Edit", Colors.blue, () {
@@ -126,7 +130,8 @@ class _EventlistItemWidgetState extends State<EventlistItemWidget> {
                 }),
                 SizedBox(width: 16.h),
                 _buildIconButton(Icons.delete, "Delete", Colors.red, () {
-                  // Handle "Delete" action
+                  print('clicked delete');
+                  Provider.of<AppState>(context, listen: false).deleteMedication(widget.medication);
                 }),
               ]),
         ],

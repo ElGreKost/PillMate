@@ -6,14 +6,10 @@ String _appTheme = "primary";
 /// Helper class for managing themes and colors.
 class ThemeHelper {
   // A map of custom color themes supported by the app
-  Map<String, PrimaryColors> _supportedCustomColor = {
-    'primary': PrimaryColors()
-  };
+  Map<String, PrimaryColors> _supportedCustomColor = {'primary': PrimaryColors()};
 
-// A map of color schemes supported by the app
-  Map<String, ColorScheme> _supportedColorScheme = {
-    'primary': ColorSchemes.primaryColorScheme
-  };
+  // A map of color schemes supported by the app
+  Map<String, ColorScheme> _supportedColorScheme = {'primary': ColorSchemes.primaryColorScheme};
 
   /// Changes the app theme to [_newTheme].
   void changeTheme(String _newTheme) {
@@ -41,43 +37,27 @@ class ThemeHelper {
     }
     //return theme from map
 
-    var colorScheme =
-        _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
+    var colorScheme = _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
     return ThemeData(
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
       textTheme: TextThemes.textTheme(colorScheme),
-      scaffoldBackgroundColor: appTheme.gray900,
+      scaffoldBackgroundColor: appTheme.grey900,
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: appTheme.cyan400,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22.h),
-          ),
-          visualDensity: const VisualDensity(
-            vertical: -4,
-            horizontal: -4,
-          ),
-          padding: EdgeInsets.zero,
-        ),
-      ),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: appTheme.cyan500,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.h)),
+              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+              padding: EdgeInsets.zero)),
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return appTheme.cyan400;
-          }
-          return colorScheme.onSurface;
-        }),
-        visualDensity: const VisualDensity(
-          vertical: -4,
-          horizontal: -4,
-        ),
-      ),
-      dividerTheme: DividerThemeData(
-        thickness: 11,
-        space: 11,
-        color: appTheme.gray900,
-      ),
+          fillColor: MaterialStateColor.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return appTheme.cyan500;
+            }
+            return colorScheme.onSurface;
+          }),
+          visualDensity: const VisualDensity(vertical: -4, horizontal: -4)),
+      dividerTheme: DividerThemeData(thickness: 11, space: 11, color: appTheme.grey900),
     );
   }
 
@@ -91,78 +71,32 @@ class ThemeHelper {
 /// Class containing the supported text theme styles.
 class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
-        bodyLarge: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 18.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
-        ),
-        bodyMedium: TextStyle(
-          color: appTheme.tealA200,
-          fontSize: 14.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
-        ),
-        bodySmall: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 10.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
-        ),
-        displaySmall: TextStyle(
-          color: Color(0XFFFFFFFF),
-          fontSize: 36.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
-        ),
-        headlineLarge: TextStyle(
-          color: appTheme.gray900,
-          fontSize: 33.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w700,
-        ),
-        headlineSmall: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 24.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        labelLarge: TextStyle(
-          color: appTheme.tealA200,
-          fontSize: 13.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        labelMedium: TextStyle(
-          color: appTheme.tealA200,
-          fontSize: 10.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        labelSmall: TextStyle(
-          color: appTheme.gray900,
-          fontSize: 9.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w700,
-        ),
-        titleLarge: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 22.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w400,
-        ),
-        titleMedium: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 18.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        titleSmall: TextStyle(
-          color: appTheme.whiteA700,
-          fontSize: 14.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
+        bodyLarge:
+            TextStyle(color: appTheme.whiteA700, fontSize: 18.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        bodyMedium:
+            TextStyle(color: appTheme.teal500, fontSize: 14.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        bodySmall:
+            TextStyle(color: appTheme.whiteA700, fontSize: 10.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        displaySmall:
+            TextStyle(color: Color(0XFFFFFFFF), fontSize: 36.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        headlineLarge:
+            TextStyle(color: appTheme.grey900, fontSize: 33.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w700),
+        headlineSmall:
+            TextStyle(color: appTheme.whiteA700, fontSize: 24.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+        labelLarge:
+            TextStyle(color: appTheme.teal500, fontSize: 13.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+        labelMedium:
+            TextStyle(color: appTheme.teal500, fontSize: 10.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+        labelSmall:
+            TextStyle(color: appTheme.grey500, fontSize: 9.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w700),
+        titleLarge:
+            TextStyle(color: appTheme.whiteA700, fontSize: 22.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        titleMedium:
+            TextStyle(color: appTheme.whiteA700, fontSize: 18.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+        titleSmall:
+            TextStyle(color: appTheme.whiteA700, fontSize: 14.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+        displayMedium:
+            TextStyle(color: appTheme.grey100, fontSize: 20.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
       );
 }
 
@@ -171,24 +105,29 @@ class ColorSchemes {
   static final primaryColorScheme = ColorScheme.light();
 }
 
-/// Class containing custom colors for a primary theme.
 class PrimaryColors {
-  // Black
-  Color get black900 => Color(0XFF000000);
+  Color get black900 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.0).toColor(); //
+  Color get black100 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.05).toColor(); //
 
-  // Cyan
-  Color get cyan400 => Color(0XFF24CCCC);
-  Color get cyan40001 => Color(0XFF23CCCC);
+  Color get cyan900 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.27).toColor(); //
+  Color get cyan500 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.47).toColor(); //
+  Color get cyan100 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.67).toColor(); //
+  
+  Color get teal900 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.5).toColor(); //
+  Color get teal500 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.7).toColor(); //
+  Color get teal100 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.9).toColor(); //
+  
+  Color get grey900 => HSLColor.fromAHSL(1.0, 220, 0.45, 0.08).toColor(); //
+  Color get grey700 => HSLColor.fromAHSL(1.0, 200, 0.45, 0.15).toColor(); //
+  Color get grey500 => HSLColor.fromAHSL(1.0, 220, 0.45, 0.28).toColor(); //
+  Color get grey100 => HSLColor.fromAHSL(1.0, 220, 0.10, 0.70).toColor(); //
 
-  // Gray
-  Color get gray900 => Color(0XFF0C1320);
+  Color get whiteA700 => HSLColor.fromAHSL(1.0, 0, 0.0, 1.0).toColor(); //
+  Color get white100 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.95).toColor(); //
 
-  // Teal
-  Color get tealA200 => Color(0XFF62F3F3);
-
-  // White
-  Color get whiteA700 => Color(0XFFFFFFFF);
+  Color get background100 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.98).toColor(); //
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();
+
 ThemeData get theme => ThemeHelper().themeData();

@@ -12,14 +12,14 @@ class GNavWidget extends StatelessWidget {
     // Accessing the provider for navigation model
     final appState = Provider.of<AppState>(context);
     return GNav(
-      rippleColor: appTheme.cyan40001,
-      hoverColor: appTheme.cyan40001,
+      rippleColor: appTheme.cyan500,
+      hoverColor: appTheme.cyan500,
       gap: 8,
       activeColor: appTheme.whiteA700,
       iconSize: 24,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       duration: Duration(milliseconds: 400),
-      tabBackgroundColor: appTheme.cyan400,
+      tabBackgroundColor: appTheme.cyan500,
       color: Colors.white,
       tabs: [
         GButton(icon: LineIcons.home, text: 'Home'),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'core/app_export.dart';
 import 'package:provider/provider.dart';
-import 'backend/app_state.dart'; // Make sure to import your NavigationModel file
+import 'backend/app_state.dart';
+import 'services/medication_data_provider.dart'; // Make sure to import your NavigationModel file
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() {
@@ -14,8 +15,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (BuildContext context) => AppState()),
+        ChangeNotifierProvider(create: (BuildContext context) => MedicationProvider()),
+      ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
           return MaterialApp(

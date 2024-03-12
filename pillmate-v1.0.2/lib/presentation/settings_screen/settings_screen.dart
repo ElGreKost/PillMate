@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium)),
                       SizedBox(height: 15.v),
-                      Divider(color: appTheme.cyan40001.withOpacity(0.32)),
+                      Divider(color: appTheme.cyan500.withOpacity(0.32)),
                       SizedBox(height: 23.v),
                       Container(
                           width: 141.h,
@@ -36,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium)),
                       SizedBox(height: 25.v),
-                      Divider(color: appTheme.cyan40001.withOpacity(0.32)),
+                      Divider(color: appTheme.cyan500.withOpacity(0.32)),
                       SizedBox(height: 22.v),
                       Padding(
                           padding: EdgeInsets.only(left: 21.h, right: 65.h),
@@ -77,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
                                         style: theme.textTheme.titleMedium)))
                           ])),
                       SizedBox(height: 27.v),
-                      Divider(color: appTheme.cyan40001.withOpacity(0.32)),
+                      Divider(color: appTheme.cyan500.withOpacity(0.32)),
                       SizedBox(height: 27.v),
                       Container(
                           width: 110.h,

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pillmate/presentation/homescreen_page/homescreen_page.dart';
-import '../presentation/addmedication_screen/addmedication_screen.dart';
 import '../presentation/modern_select_day/modern_select_day.dart';
 import '../presentation/select_medication_type_screen/select_medication_type_screen.dart';
 import '../presentation/select_pill_name/select_pill_name.dart';
 import '../presentation/settings_screen/settings_screen.dart';
-import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 
 class AppRoutes {
   static const String homescreenPage = '/homescreen_page';
@@ -18,14 +16,12 @@ class AppRoutes {
 
   static const String selectMedicationTypeScreen = '/select_medication_type_screen';
 
-  static const String appNavigationScreen = '/app_navigation_screen';
 
   static Map<String, WidgetBuilder> routes = {
     homescreenPage: (context) => HomescreenPage(),
     selectMedicationTypeScreen: (context) => SelectMedicationTypeScreen(),
     settingsScreen: (context) => SettingsScreen(),
     selectPillName: (context) => SelectPillName(),
-    // appNavigationScreen: (context) => AppNavigationScreen(),
     modernSelectDay: (context) => ModernSelectDay()
   };
 }

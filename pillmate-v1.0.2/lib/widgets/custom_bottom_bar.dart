@@ -48,7 +48,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
         SizedBox(
           width: double.maxFinite,
           child: Divider(
-            color: appTheme.cyan40001.withOpacity(0.32),
+            color: appTheme.cyan500.withOpacity(0.32),
           ),
         ),
         SizedBox(
@@ -71,7 +71,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
                       imagePath: bottomMenuList[index].icon,
                       height: 34.adaptSize,
                       width: 34.adaptSize,
-                      color: appTheme.cyan400,
+                      color: appTheme.cyan500,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10.v),
@@ -92,7 +92,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
                       imagePath: bottomMenuList[index].activeIcon,
                       height: 35.v,
                       width: 33.h,
-                      color: appTheme.cyan400,
+                      color: appTheme.cyan500,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10.v),

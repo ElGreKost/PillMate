@@ -34,8 +34,8 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
                 });
               },
               activeColor: appTheme.whiteA700, // Customize to match your theme
-              inactiveThumbColor: appTheme.gray900, // Customize to match your theme
-              inactiveTrackColor: appTheme.cyan400, // Customize to match your theme
+              inactiveThumbColor: appTheme.grey500, // Customize to match your theme
+              inactiveTrackColor: appTheme.cyan500, // Customize to match your theme
             ),
           ),
           SizedBox(height: 37.v),

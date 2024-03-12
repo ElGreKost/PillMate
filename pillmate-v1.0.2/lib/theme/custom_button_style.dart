@@ -5,7 +5,7 @@ import '../core/app_export.dart';
 class CustomButtonStyles {
   // Filled button style
   static ButtonStyle get fillCyan => ElevatedButton.styleFrom(
-        backgroundColor: appTheme.cyan400,
+        backgroundColor: appTheme.cyan500,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(11.h),
         ),
@@ -19,7 +19,7 @@ class CustomButtonStyles {
 
   // Outline button style
   static ButtonStyle get outlineBlack => ElevatedButton.styleFrom(
-        backgroundColor: appTheme.gray900,
+        backgroundColor: appTheme.grey500,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.h),
         ),

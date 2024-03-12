@@ -1,7 +1,10 @@
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
+import 'package:provider/provider.dart';
+import '../../backend/app_state.dart';
+import '../../services/medication.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
-import 'widgets/eventlist_item_widget.dart';
+import 'widgets/med_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:pillmate/core/app_export.dart';
 
@@ -17,7 +20,7 @@ class HomescreenPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           leading: IconButton(
               onPressed: () => Navigator.pushNamed(context, AppRoutes.settingsScreen),
-              icon: Icon(Icons.settings, color: appTheme.cyan400)),
+              icon: Icon(Icons.settings, color: appTheme.cyan500)),
           centerTitle: true,
           title: AppbarTitleButton(),
           actions: [
@@ -26,7 +29,7 @@ class HomescreenPage extends StatelessWidget {
                     context: context,
                     backgroundColor: Colors.transparent,
                     builder: (BuildContext context) => SizedBox(height: 340.h, child: AudioBottomSheet())),
-                icon: Icon(Icons.campaign_outlined, color: appTheme.cyan400, size: 35.h))
+                icon: Icon(Icons.campaign_outlined, color: appTheme.cyan500, size: 35.h))
           ]),
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
@@ -38,21 +41,23 @@ class HomescreenPage extends StatelessWidget {
                 ]),
                 textAlign: TextAlign.left),
             SizedBox(height: 8),
-            _buildEventList(context),
+            _buildMedList(context),
             SizedBox(height: 20.v),
           ])),
       bottomNavigationBar: GNavWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
         child: Icon(Icons.add, color: Colors.white, size: 35.v),
-        backgroundColor: appTheme.cyan400,
-
+        backgroundColor: appTheme.cyan500,
       ),
     ));
   }
 
   /// Section Widget
-  Widget _buildEventList(BuildContext context) {
+  Widget _buildMedList(BuildContext context) {
+
+    List<Medication> medList = Provider.of<AppState>(context).medList;
+
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(left: 8.h, right: 21.h),
@@ -60,9 +65,9 @@ class HomescreenPage extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             separatorBuilder: (context, index) => SizedBox(height: 40.v),
-            itemCount: 6,
+            itemCount: medList.length,
             // make it as big as the length of the medications the user has to take
-            itemBuilder: (context, index) => EventlistItemWidget()),
+            itemBuilder: (context, index) => MedListTile(medication: medList[index])),
       ),
     );
   }

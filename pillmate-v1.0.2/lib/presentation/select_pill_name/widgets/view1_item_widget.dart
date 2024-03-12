@@ -20,12 +20,12 @@ class View1ItemWidget extends StatelessWidget {
             height: 21.adaptSize,
             width: 21.adaptSize,
             decoration: BoxDecoration(
-              color: appTheme.cyan400,
+              color: appTheme.cyan500,
               borderRadius: BorderRadius.circular(
                 10.h,
               ),
               border: Border.all(
-                color: appTheme.cyan400,
+                color: appTheme.cyan500,
                 width: 2.h,
               ),
             ),
