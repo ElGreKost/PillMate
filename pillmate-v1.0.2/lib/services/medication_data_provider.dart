@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MedicationProvider extends ChangeNotifier {
   String? _selectedPillName;
@@ -62,21 +62,20 @@ class MedicationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to add medication to Firestore
-  Future<void> addMedicationToFirestore() async {
+  Future<void> addMedication() async {
     try {
-      // Reference to the Firestore collection
-      final CollectionReference medicationsCollection = FirebaseFirestore.instance.collection('medications');
 
-      // Print out the data before adding it to Firestore
-      print('Adding medication to Firestore:');
+      final Box medicationsBox = await Hive.openBox('medications');
+
+      // Print out the data before adding it to Hive
+      print('Adding medication to Hive:');
       print('Name: $_selectedPillName');
       print('Type: $_selectedPillType');
       print('Days: $_selectedDays');
       print('Between Meals: $_betweenMeals');
       print('Exact Time: $_exactTime');
 
-      // Create data to be added to Firestore
+      // Create data to be added to Hive
       Map<String, dynamic> data = {
         'name': _selectedPillName,
         'type': _selectedPillType,
@@ -85,12 +84,20 @@ class MedicationProvider extends ChangeNotifier {
         'exactTime': _exactTime?.toString(), // Storing TimeOfDay as String
       };
 
-      // Add medication data to Firestore
-      await medicationsCollection.doc().set(data);
+      // Add medication data to Hive
+      await medicationsBox.add(data);
 
       print('Medication added successfully!');
+
+      // Print the contents of the box
+      print('Contents of medications box:');
+      for (var i = 0; i < medicationsBox.length; i++) {
+        print(medicationsBox.getAt(i));
+      }
+
     } catch (e) {
-      print('Error adding medication to Firestore: $e');
+      print('Error adding medication to Hive: $e');
     }
   }
+
 }

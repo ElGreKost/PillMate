@@ -119,7 +119,7 @@ class _ModernSelectDayState extends State<ModernSelectDay> {
         scheduledTime: medicationProvider.exactTime!);
     Provider.of<AppState>(context, listen: false).addMedication(newMedication);
 
-    await medicationProvider.addMedicationToFirestore(); // Add medication to Firestore
+    await medicationProvider.addMedication();
     Navigator.pushNamed(context, AppRoutes.homescreenPage);
   }
 }
