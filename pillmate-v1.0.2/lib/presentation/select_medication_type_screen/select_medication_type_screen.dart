@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:pillmate/core/app_export.dart';
+import 'package:pillmate/widgets/app_bar/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:pillmate/services/medication_data_provider.dart';
 import '../../widgets/custom_elevated_button.dart';
-import '../pickaudio_screen/pickaudio_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SelectMedicationTypeScreen extends StatefulWidget {
@@ -15,7 +14,7 @@ class SelectMedicationTypeScreen extends StatefulWidget {
     Key? key,
     this.medicationTypes = const [
       {'type': 'Pill', 'icon': FontAwesomeIcons.pills},
-      {'type': 'Solution', 'icon': Ionicons.flask},
+      {'type': 'Drink', 'icon': Ionicons.flask},
       {'type': 'Injection', 'icon': FontAwesomeIcons.syringe},
       {'type': 'Powder', 'icon': Icons.scatter_plot},
       {'type': 'Drops', 'icon': Icons.water_drop},
@@ -32,26 +31,10 @@ class _SelectMedicationTypeScreenState extends State<SelectMedicationTypeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final medicationProvider = Provider.of<MedicationProvider>(context);
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: appTheme.whiteA700), onPressed: () => Navigator.pop(context)),
-          backgroundColor: Colors.transparent,
-          title: Text("Select Medication Type", style: theme.textTheme.titleMedium),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () => showModalBottomSheet(
-                    context: context,
-                    useSafeArea: false,
-                    backgroundColor: Colors.transparent,
-                    builder: (BuildContext context) => SizedBox(height: 340.h, child: AudioBottomSheet())),
-                icon: Icon(Icons.campaign_outlined, color: appTheme.whiteA700, size: 35.h))
-          ],
-        ),
+        appBar: CustomAppBar(titleText: 'Select Medication Type'),
         body: Padding(
           padding: EdgeInsets.all(8),
           child: Column(

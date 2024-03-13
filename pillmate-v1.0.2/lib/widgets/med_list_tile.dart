@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:pillmate/core/app_export.dart';
-import 'package:pillmate/services/medication_data_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../backend/app_state.dart';
-import '../../../services/medication.dart'; // Adjust the import paths as necessary.
+import '../backend/app_state.dart';
+import '../services/medication.dart'; // Adjust the import paths as necessary.
 
 class MedListTile extends StatefulWidget {
   final Medication medication;
@@ -19,6 +17,7 @@ class MedListTile extends StatefulWidget {
 
 class _MedListTileState extends State<MedListTile> {
   bool _isLongPressed = false;
+  bool _isEditPressed = false;
 
   double calculateFillRatio(DateTime scheduledTime) {
     final DateTime now = DateTime.now();
@@ -40,12 +39,16 @@ class _MedListTileState extends State<MedListTile> {
     return GestureDetector(
       onLongPress: () {
         setState(() {
-          _isLongPressed = !_isLongPressed;
+          _isLongPressed = true; // Enable the initial long press state
         });
       },
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 300),
-        child: _isLongPressed ? _buildLongPressView() : _buildDefaultView(),
+        child: _isEditPressed
+            ? _buildExpandedView()
+            : _isLongPressed
+                ? _buildLongPressView()
+                : _buildDefaultView(),
       ),
     );
   }
@@ -121,9 +124,7 @@ class _MedListTileState extends State<MedListTile> {
                   Provider.of<AppState>(context, listen: false).deleteMedication(widget.medication);
                 }),
                 SizedBox(width: 16.h),
-                _buildIconButton(Icons.edit, "Edit", Colors.blue, () {
-                  // Handle "Edit" action
-                }),
+                _buildIconButton(Icons.edit, "Edit", Colors.blue, () => setState(() => _isEditPressed = true)),
                 SizedBox(width: 16.h),
                 _buildIconButton(Icons.info, "Info", Colors.amber, () {
                   // Handle "Info" action
@@ -139,25 +140,84 @@ class _MedListTileState extends State<MedListTile> {
     );
   }
 
-  Widget _buildIconButton(IconData icon, String tooltip, Color color, VoidCallback onPressed) {
-    return IconButton(icon: Icon(icon, size: 40.h), color: color, tooltip: tooltip, onPressed: onPressed);
-  }
-
-  Widget _buildOptionButton(String title, Color color, VoidCallback onPressed) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0), // Add some padding around the buttons
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // Rounded corners for buttons
-          ),
-          textStyle: TextStyle(fontSize: 16.h), // Larger text size for better readability
-          padding: EdgeInsets.symmetric(vertical: 12.v, horizontal: 24.h), // Custom padding
+  Widget _buildExpandedView() {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      key: ValueKey('expandedView'),
+      padding: EdgeInsets.all(12.h),
+      decoration: AppDecoration.white,
+      height: _isLongPressed ? 300.h : 100.h,
+      // Adjust height based on the state
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Existing row for medication details
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.h),
+                  child: Icon(widget.medication.icon, size: 48.h, color: appTheme.cyan500),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.v),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(DateFormat('h:mm a').format(widget.medication.scheduledTime),
+                            style: TextStyle(fontSize: 12.v, color: Colors.grey)),
+                        Text(widget.medication.name, style: CustomTextStyles.headlineSmallBold),
+                        SizedBox(height: 4.v),
+                        Text("1 ${widget.medication.kind} \t ${widget.medication.betweenMeals}",
+                            style: theme.textTheme.titleMedium),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            // TextField for notes
+            TextField(
+              maxLines: 3,
+              decoration: InputDecoration(hintText: "Write notes about this treatment..."),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    // Handle save logic here
+                    setState(() {
+                      _isEditPressed = false;
+                      _isLongPressed = false;
+                    });
+                  },
+                  child: Text('Save'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Optionally handle additional logic here
+                    setState(() {
+                      _isEditPressed = false;
+                      _isLongPressed = false;
+                    });
+                  },
+                  child: Text('Cancel'),
+                  // color: Colors.red,
+                ),
+              ],
+            ),
+          ],
         ),
-        child: Text(title),
       ),
     );
+  }
+
+  Widget _buildIconButton(IconData icon, String tooltip, Color color, VoidCallback onPressed) {
+    return IconButton(icon: Icon(icon, size: 40.h), color: color, tooltip: tooltip, onPressed: onPressed);
   }
 }

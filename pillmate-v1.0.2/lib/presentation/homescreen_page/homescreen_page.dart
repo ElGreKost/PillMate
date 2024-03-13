@@ -4,7 +4,7 @@ import '../../backend/app_state.dart';
 import '../../services/medication.dart';
 import '../../widgets/bottom_navigation_bar.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
-import 'widgets/med_list_tile.dart';
+import '../../widgets/med_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:pillmate/core/app_export.dart';
 
