@@ -13,13 +13,6 @@ class HomescreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Medication> medications = _getAllMedications();
-
-    print('All medications:');
-    medications.forEach((medication) {
-      print(medication.name);
-    });
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -42,7 +35,27 @@ class HomescreenPage extends StatelessWidget {
             )
           ],
         ),
-        body: Padding(
+        body: _buildMedList(context),
+        bottomNavigationBar: GNavWidget(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
+          child: Icon(Icons.add, color: Colors.white, size: 35.v),
+          backgroundColor: appTheme.cyan500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMedList(BuildContext context) {
+    return ValueListenableBuilder<Box>(
+      valueListenable: Hive.box('medications').listenable(),
+      builder: (context, box, _) {
+        List<Medication> medications = _getAllMedications(box);
+        print('All medications:');
+        medications.forEach((medication) {
+          print(medication.name);
+        });
+        return Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,23 +70,24 @@ class HomescreenPage extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 8),
-              _buildMedList(context, medications),
+              Expanded(
+                child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) => SizedBox(height: 40.v),
+                  itemCount: medications.length,
+                  itemBuilder: (context, index) => MedListTile(medication: medications[index]),
+                ),
+              ),
               SizedBox(height: 20.v),
             ],
           ),
-        ),
-        bottomNavigationBar: GNavWidget(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
-          child: Icon(Icons.add, color: Colors.white, size: 35.v),
-          backgroundColor: appTheme.cyan500,
-        ),
-      ),
+        );
+      },
     );
   }
 
-  List<Medication> _getAllMedications() {
-    Box box = Hive.box('medications');
+  List<Medication> _getAllMedications(Box box) {
     List<Medication> allMedications = [];
     for (var key in box.keys) {
       dynamic data = box.get(key);
@@ -84,31 +98,15 @@ class HomescreenPage extends StatelessWidget {
           type: data['type'] ?? '',
           days: List<String>.from(data['days'] ?? []),
           betweenMeals: data['betweenMeals'] ?? '',
-          exactTime: data['exactTime'] != null
-              ? DateTime.parse(data['exactTime'])
-              : DateTime.now(),
+          exactTime: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);
         print('finished');
+      } else {
+        print(data.runtimeType);
       }
-      else print(data.runtimeType);
     }
     return allMedications;
-  }
-
-  Widget _buildMedList(BuildContext context, List<Medication> medications) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.only(left: 8.h, right: 21.h),
-        child: ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          separatorBuilder: (context, index) => SizedBox(height: 40.v),
-          itemCount: medications.length,
-          itemBuilder: (context, index) => MedListTile(medication: medications[index]),
-        ),
-      ),
-    );
   }
 }
