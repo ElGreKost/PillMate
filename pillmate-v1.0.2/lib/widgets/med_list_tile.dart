@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pillmate/core/app_export.dart';
@@ -18,6 +19,18 @@ class MedListTile extends StatefulWidget {
 class _MedListTileState extends State<MedListTile> {
   bool _isLongPressed = false;
   bool _isEditPressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    scheduleMedicationNotifications();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    AwesomeNotifications().cancel(widget.medication.notificationId);
+  }
 
   double calculateFillRatio(DateTime scheduledTime) {
     final DateTime now = DateTime.now();
@@ -131,7 +144,6 @@ class _MedListTileState extends State<MedListTile> {
                 }),
                 SizedBox(width: 16.h),
                 _buildIconButton(Icons.delete, "Delete", Colors.red, () {
-                  print('clicked delete');
                   Provider.of<AppState>(context, listen: false).deleteMedication(widget.medication);
                 }),
               ]),
@@ -219,5 +231,43 @@ class _MedListTileState extends State<MedListTile> {
 
   Widget _buildIconButton(IconData icon, String tooltip, Color color, VoidCallback onPressed) {
     return IconButton(icon: Icon(icon, size: 40.h), color: color, tooltip: tooltip, onPressed: onPressed);
+  }
+
+  void scheduleMedicationNotifications() {
+    DateTime scheduledTime = widget.medication.scheduledTime;
+    int medicationId = widget.medication.notificationId; // Assuming each medication has a unique ID.
+
+    // Schedule notification 1 hour before the scheduled time
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: medicationId, // Ensure this is a unique ID for each notification
+        channelKey: 'basic_channel',
+        title: '${widget.medication.name} Time',
+        body: 'Time to take your ${widget.medication.kind}. Scheduled in 1 hour.',
+      ),
+      schedule: NotificationCalendar.fromDate(date: scheduledTime.subtract(Duration(hours: 1))),
+    );
+
+    // Schedule notification 10 minutes before the scheduled time
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: medicationId, // Modify ID to ensure uniqueness
+        channelKey: 'basic_channel',
+        title: '${widget.medication.name} Time',
+        body: 'Time to take your ${widget.medication.kind}. Scheduled in 10 minutes.',
+      ),
+      schedule: NotificationCalendar.fromDate(date: scheduledTime.subtract(Duration(minutes: 10))),
+    );
+
+    // Schedule notification at the exact scheduled time
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: medicationId, // Modify ID to ensure uniqueness
+        channelKey: 'basic_channel',
+        title: '${widget.medication.name} Time',
+        body: 'Time to take your ${widget.medication.kind}. It\'s time!',
+      ),
+      schedule: NotificationCalendar.fromDate(date: scheduledTime),
+    );
   }
 }

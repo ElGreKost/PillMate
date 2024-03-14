@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import '../routes/app_routes.dart';
 import '../services/medication.dart';
@@ -19,6 +20,7 @@ class AppState with ChangeNotifier {
 
   // For medication list
   List<Medication> medList = [
+    Medication(name: 'DepoNaki', icon: Icons.water_drop, kind: 'pill', specificDays: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 1, seconds: 10))),
     Medication(name: 'Depon', icon: Icons.water_drop, kind: 'pill', specificDays: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 7))),
     Medication(name: 'Algofren', icon: Icons.water_drop, kind: 'pill', specificDays: ['Sat', 'Wed', 'Mon'], betweenMeals: 'Before food', scheduledTime: DateTime.now().add(Duration(hours: 8))),
     Medication(name: 'Ponstan', icon: Icons.water_drop, kind: 'pill', specificDays: ['Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 2))),

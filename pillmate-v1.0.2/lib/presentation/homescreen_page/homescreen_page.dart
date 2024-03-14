@@ -1,4 +1,6 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
+import 'package:pillmate/widgets/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
 import '../../backend/app_state.dart';
 import '../../services/medication.dart';
@@ -40,6 +42,17 @@ class HomescreenPage extends StatelessWidget {
                   TextSpan(text: "Gracy", style: theme.textTheme.displaySmall)
                 ]),
                 textAlign: TextAlign.left),
+            CustomElevatedButton(
+              text: 'Notification',
+              onPressed: () => AwesomeNotifications().createNotification(
+                  content: NotificationContent(
+                    id: 10,
+                    channelKey: 'basic_channel',
+                    actionType: ActionType.Default,
+                    title: 'Hello World!',
+                    body: 'This is my first notification!',
+                  )),
+            ),
             SizedBox(height: 8),
             _buildMedList(context),
             SizedBox(height: 20.v),
@@ -55,7 +68,6 @@ class HomescreenPage extends StatelessWidget {
 
   /// Section Widget
   Widget _buildMedList(BuildContext context) {
-
     List<Medication> medList = Provider.of<AppState>(context).medList;
 
     return Expanded(

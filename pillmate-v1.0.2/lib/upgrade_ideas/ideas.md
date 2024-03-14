@@ -3,3 +3,4 @@
 * Add Units so that as soon as one picks the days to take the pill also an indicator of how many
     units left to take will appear
 * maybe keep purple as 3rd color
+* Use mac to setup ios notifications
