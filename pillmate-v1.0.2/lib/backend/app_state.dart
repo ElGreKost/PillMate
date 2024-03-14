@@ -19,12 +19,12 @@ class AppState with ChangeNotifier {
 
   // For medication list
   List<Medication> medList = [
-    Medication(name: 'Depon', icon: Icons.water_drop, kind: 'pill', specificDays: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 7))),
-    Medication(name: 'Algofren', icon: Icons.water_drop, kind: 'pill', specificDays: ['Sat', 'Wed', 'Mon'], betweenMeals: 'Before food', scheduledTime: DateTime.now().add(Duration(hours: 8))),
-    Medication(name: 'Ponstan', icon: Icons.water_drop, kind: 'pill', specificDays: ['Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 2))),
-    Medication(name: 'Niflamol', icon: Icons.water_drop, kind: 'pill', specificDays: ['Everyday'], betweenMeals: 'Before food', scheduledTime: DateTime.now().add(Duration(hours: 7))),
-    Medication(name: 'Depon', icon: Icons.water_drop, kind: 'pill', specificDays: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', scheduledTime: DateTime.now().add(Duration(hours: 5))),
-    Medication(name: 'Algofren', icon: Icons.water_drop, kind: 'pill', specificDays: ['Sat', 'Wed', 'Mon'], betweenMeals: 'Before food', scheduledTime: DateTime.now().add(Duration(hours: 1))),
+    Medication(name: 'Depon', icon: Icons.water_drop, type: 'pill', days: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', exactTime: DateTime.now().add(Duration(hours: 7))),
+    Medication(name: 'Algofren', icon: Icons.water_drop, type: 'pill', days: ['Sat', 'Wed', 'Mon'], betweenMeals: 'Before food', exactTime: DateTime.now().add(Duration(hours: 8))),
+    Medication(name: 'Ponstan', icon: Icons.water_drop, type: 'pill', days: ['Fri'], betweenMeals: 'Anytime', exactTime: DateTime.now().add(Duration(hours: 2))),
+    Medication(name: 'Niflamol', icon: Icons.water_drop, type: 'pill', days: ['Everyday'], betweenMeals: 'Before food', exactTime: DateTime.now().add(Duration(hours: 7))),
+    Medication(name: 'Depon', icon: Icons.water_drop, type: 'pill', days: ['Mon', 'Wed', 'Fri'], betweenMeals: 'Anytime', exactTime: DateTime.now().add(Duration(hours: 5))),
+    Medication(name: 'Algofren', icon: Icons.water_drop, type: 'pill', days: ['Sat', 'Wed', 'Mon'], betweenMeals: 'Before food', exactTime: DateTime.now().add(Duration(hours: 1))),
   ];
 
   void addMedication(Medication med) {

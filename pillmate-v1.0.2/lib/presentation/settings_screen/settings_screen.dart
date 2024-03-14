@@ -10,7 +10,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: _buildAppBar(context),
+            appBar: CustomAppBar(titleText: 'Settings',),
             body: Container(
                 width: double.maxFinite,
                 padding: EdgeInsets.symmetric(horizontal: 48.h, vertical: 21.v),
@@ -88,16 +88,5 @@ class SettingsScreen extends StatelessWidget {
                               style: theme.textTheme.titleSmall)),
                       SizedBox(height: 5.v)
                     ]))));
-  }
-
-  /// Section Widget
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return CustomAppBar(
-        leadingWidth: double.maxFinite,
-        leading: AppbarLeadingIconbutton(
-            imagePath: ImageConstant.imgCloseTealA200,
-            margin: EdgeInsets.fromLTRB(28.h, 12.v, 354.h, 12.v),
-            onTap: () {
-            }));
   }
 }

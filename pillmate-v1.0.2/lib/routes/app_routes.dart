@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pillmate/presentation/homescreen_page/homescreen_page.dart';
-import '../presentation/modern_select_day/modern_select_day.dart';
+import '../presentation/plan_medication/plan_medication.dart';
 import '../presentation/select_medication_type_screen/select_medication_type_screen.dart';
 import '../presentation/select_pill_name/select_pill_name.dart';
 import '../presentation/settings_screen/settings_screen.dart';
@@ -22,6 +22,6 @@ class AppRoutes {
     selectMedicationTypeScreen: (context) => SelectMedicationTypeScreen(),
     settingsScreen: (context) => SettingsScreen(),
     selectPillName: (context) => SelectPillName(),
-    modernSelectDay: (context) => ModernSelectDay()
+    modernSelectDay: (context) => PlanMedicationScreen(),
   };
 }

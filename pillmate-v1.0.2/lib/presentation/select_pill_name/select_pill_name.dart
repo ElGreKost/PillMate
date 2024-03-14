@@ -5,6 +5,7 @@ import 'package:pillmate/widgets/custom_text_field.dart';
 import '../../services/medication_data_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
@@ -20,22 +21,7 @@ class _SelectPillNameState extends State<SelectPillName> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: appTheme.whiteA700), onPressed: () => Navigator.pop(context)),
-              backgroundColor: Colors.transparent,
-              title: Text("Which medication to add", style: theme.textTheme.titleMedium),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                    onPressed: () => showModalBottomSheet(
-                        context: context,
-                        useSafeArea: false,
-                        backgroundColor: Colors.transparent,
-                        builder: (BuildContext context) => SizedBox(height: 340.h, child: AudioBottomSheet())),
-                    icon: Icon(Icons.campaign_outlined, color: appTheme.whiteA700, size: 35.h))
-              ],
-            ),
+            appBar: CustomAppBar(titleText: 'Which medication to add'),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [

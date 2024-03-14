@@ -5,7 +5,7 @@ import 'package:pillmate/core/app_export.dart';
 import 'package:pillmate/backend/app_state.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
 import '../../services/medication.dart';
-import 'widgets/med_list_tile.dart';
+import '../../widgets/med_list_tile.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
 class HomescreenPage extends StatelessWidget {
@@ -81,10 +81,10 @@ class HomescreenPage extends StatelessWidget {
         print('data printed is: ${data['name']}');
         Medication medication = Medication(
           name: data['name'] ?? '',
-          kind: data['type'] ?? '',
-          specificDays: List<String>.from(data['days'] ?? []),
+          type: data['type'] ?? '',
+          days: List<String>.from(data['days'] ?? []),
           betweenMeals: data['betweenMeals'] ?? '',
-          scheduledTime: data['exactTime'] != null
+          exactTime: data['exactTime'] != null
               ? DateTime.parse(data['exactTime'])
               : DateTime.now(),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data

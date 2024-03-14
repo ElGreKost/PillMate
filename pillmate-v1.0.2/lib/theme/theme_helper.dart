@@ -58,6 +58,39 @@ class ThemeHelper {
           }),
           visualDensity: const VisualDensity(vertical: -4, horizontal: -4)),
       dividerTheme: DividerThemeData(thickness: 11, space: 11, color: appTheme.grey900),
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        titleTextStyle: TextThemes.textTheme(colorScheme).titleMedium,
+        backgroundColor: Colors.transparent,
+      ),
+      cardColor: _supportedCustomColor[_appTheme]?.grey700,
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: appTheme.cyan500,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // Rounded Corners for Button
+          ),
+          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Button Padding
+        ),
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: appTheme.grey500),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: appTheme.grey500),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: appTheme.cyan500, width: 2.0),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        labelStyle: TextStyle(color: appTheme.cyan500),
+        hintStyle: TextStyle(color: appTheme.grey500),
+      ),
+      // useMaterial3: true
     );
   }
 
@@ -112,15 +145,22 @@ class PrimaryColors {
   Color get cyan900 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.27).toColor(); //
   Color get cyan500 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.47).toColor(); //
   Color get cyan100 => HSLColor.fromAHSL(1.0, 180, 0.7, 0.67).toColor(); //
-  
+
   Color get teal900 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.5).toColor(); //
   Color get teal500 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.7).toColor(); //
   Color get teal100 => HSLColor.fromAHSL(1.0, 180, 0.85, 0.9).toColor(); //
-  
+
+  // Purple
+  Color get purple900 => HSLColor.fromAHSL(1.0, 270, 0.7, 0.3).toColor(); //
+  Color get purple700 => HSLColor.fromAHSL(0.3, 270, 0.7, 0.3).toColor(); //
+  Color get purple500 => HSLColor.fromAHSL(1.0, 270, 0.7, 0.5).toColor(); //
+  Color get purple100 => HSLColor.fromAHSL(1.0, 280, 0.7, 0.9).toColor(); //
+
   Color get grey900 => HSLColor.fromAHSL(1.0, 220, 0.45, 0.08).toColor(); //
-  Color get grey700 => HSLColor.fromAHSL(1.0, 200, 0.45, 0.15).toColor(); //
+  Color get grey700 => HSLColor.fromAHSL(0.5, 200, 0.45, 0.15).toColor(); //
   Color get grey500 => HSLColor.fromAHSL(1.0, 220, 0.45, 0.28).toColor(); //
-  Color get grey100 => HSLColor.fromAHSL(1.0, 220, 0.10, 0.70).toColor(); //
+  Color get grey300 => HSLColor.fromAHSL(1.0, 220, 0.45, 0.5).toColor(); //
+  Color get grey100 => HSLColor.fromAHSL(1.0, 220, 0.6, 0.80).toColor(); //
 
   Color get whiteA700 => HSLColor.fromAHSL(1.0, 0, 0.0, 1.0).toColor(); //
   Color get white100 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.95).toColor(); //

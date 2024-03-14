@@ -2,9 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import '../backend/app_state.dart';
+import '../services/medication.dart'; // Adjust the import paths as necessary.
+import 'package:flutter/foundation.dart';
 
-import '../../../backend/app_state.dart';
-import '../../../services/medication.dart'; // Adjust the import paths as necessary.
+bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
+
+
+// Compare the values of each key in the maps
+  for (var key in map1.keys) {
+    // Check if the values are lists and compare them using listEquals
+    if (map1[key] is List && map2[key] is List) {
+      if (!listEquals(map1[key], map2[key])) {
+        return false;
+      }
+    } else {
+      // For non-list values, compare directly
+      if (map1[key] != map2[key]) {
+        return false;
+      }
+    }
+  }
+
+// If all values are equal, return true
+return true;
+
+}
+
+
+
+
 
 class MedListTile extends StatefulWidget {
   final Medication medication;
@@ -18,6 +46,45 @@ class MedListTile extends StatefulWidget {
 class _MedListTileState extends State<MedListTile> {
   bool _isLongPressed = false;
   bool _isEditPressed = false;
+
+  Future<void> deleteMedicationFromBox(Map<dynamic, dynamic> medicationData) async {
+    try {
+      final Box medicationsBox = await Hive.openBox('medications');
+
+      dynamic medicationKey;
+
+      for (var key in medicationsBox.keys) {
+        final storedData = medicationsBox.get(key);
+        if (storedData != null && storedData is Map<dynamic, dynamic>) {
+          print('$storedData');
+          final Map<String, dynamic> storedMap = Map<String, dynamic>.from(storedData);
+          print('$storedMap');
+          final Map<String, dynamic> medicationDataMap = medicationData as Map<String, dynamic>;
+          print('$medicationDataMap');
+          if (areMapsEqual(storedMap, medicationDataMap)) {
+            print('found');
+            medicationKey = key;
+            break; // Break the loop once the key is found
+          }
+        }
+      }
+
+
+
+      if (medicationKey != null) {
+        // Delete the medication from the box
+        print('medication key is: $medicationKey');
+        await medicationsBox.delete(medicationKey);
+
+        print('Medication deleted successfully!');
+      } else {
+        print('Medication not found in the box.');
+      }
+    } catch (e) {
+      print('Error deleting medication from Hive: $e');
+    }
+  }
+
 
   double calculateFillRatio(DateTime scheduledTime) {
     final DateTime now = DateTime.now();
@@ -47,14 +114,14 @@ class _MedListTileState extends State<MedListTile> {
         child: _isEditPressed
             ? _buildExpandedView()
             : _isLongPressed
-            ? _buildLongPressView()
-            : _buildDefaultView(),
+                ? _buildLongPressView()
+                : _buildDefaultView(),
       ),
     );
   }
 
   Widget _buildDefaultView() {
-    final double fillRatio = calculateFillRatio(widget.medication.scheduledTime);
+    final double fillRatio = calculateFillRatio(widget.medication.exactTime);
     final Color fillColor = appTheme.cyan500; // Use a primary theme color for fill
 
     return Container(
@@ -69,7 +136,7 @@ class _MedListTileState extends State<MedListTile> {
                 widthFactor: fillRatio,
                 child: Container(
                   decoration:
-                  BoxDecoration(color: fillColor.withOpacity(0.5), borderRadius: BorderRadius.circular(30.h)),
+                      BoxDecoration(color: fillColor.withOpacity(0.5), borderRadius: BorderRadius.circular(30.h)),
                 ),
               ),
             ),
@@ -87,11 +154,11 @@ class _MedListTileState extends State<MedListTile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(DateFormat('h:mm a').format(widget.medication.scheduledTime),
+                      Text(DateFormat('h:mm a').format(widget.medication.exactTime),
                           style: TextStyle(fontSize: 12.v, color: Colors.grey)),
                       Text(widget.medication.name, style: CustomTextStyles.headlineSmallBold),
                       SizedBox(height: 4.v),
-                      Text("1 ${widget.medication.kind} \t ${widget.medication.betweenMeals}",
+                      Text("1 ${widget.medication.type} \t ${widget.medication.betweenMeals}",
                           style: theme.textTheme.titleMedium),
                     ],
                   ),
@@ -132,7 +199,8 @@ class _MedListTileState extends State<MedListTile> {
                 SizedBox(width: 16.h),
                 _buildIconButton(Icons.delete, "Delete", Colors.red, () {
                   print('clicked delete');
-                  Provider.of<AppState>(context, listen: false).deleteMedication(widget.medication);
+                  print(widget.medication.runtimeType);
+                  deleteMedicationFromBox(widget.medication.toMap());
                 }),
               ]),
         ],
@@ -167,11 +235,11 @@ class _MedListTileState extends State<MedListTile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(DateFormat('h:mm a').format(widget.medication.scheduledTime),
+                        Text(DateFormat('h:mm a').format(widget.medication.exactTime),
                             style: TextStyle(fontSize: 12.v, color: Colors.grey)),
                         Text(widget.medication.name, style: CustomTextStyles.headlineSmallBold),
                         SizedBox(height: 4.v),
-                        Text("1 ${widget.medication.kind} \t ${widget.medication.betweenMeals}",
+                        Text("1 ${widget.medication.type} \t ${widget.medication.betweenMeals}",
                             style: theme.textTheme.titleMedium),
                       ],
                     ),
