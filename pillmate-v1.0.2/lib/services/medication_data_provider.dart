@@ -14,17 +14,17 @@ class MedicationProvider extends ChangeNotifier {
 
   IconData? get selectedPillIconData => _selectedPillIconData;
 
-  List<String> _selectedDays = [];
+  List<int> _selectedDays = List.generate(10, (index) => 0);
 
-  List<String> get selectedDays => _selectedDays;
+  List<int> get selectedDays => _selectedDays;
 
   String? _betweenMeals = 'Anytime';
 
   String? get betweenMeals => _betweenMeals;
 
-  DateTime? _exactTime;
+  List<DateTime?> _scheduledTimeList = [];
 
-  DateTime? get exactTime => _exactTime;
+  List<DateTime?> get scheduledTimeList => _scheduledTimeList;
 
   // Method to set selected pill name
   void setSelectedPillName(String pillName) {
@@ -43,7 +43,7 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   // Method to set selected days
-  void setSelectedDays(List<String> days) {
+  void setSelectedDays(List<int> days) {
     _selectedDays = days;
     notifyListeners();
   }
@@ -55,16 +55,32 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   // Method to set exact time
-  void setExactTime(TimeOfDay time) {
-    final now = DateTime.now();
-    final timeOfDay2DateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    _exactTime = timeOfDay2DateTime;
+  void setScheduledTimeList(List<int> activeDays, TimeOfDay time) {
+    DateTime findNextDayOfWeek(int targetWeekday) {
+      DateTime now = DateTime.now();
+      int currentWeekday = now.weekday;
+
+      int daysToAdd;
+      if (currentWeekday <= targetWeekday) { // this week
+        daysToAdd = targetWeekday - currentWeekday;
+      } else { // next week
+        daysToAdd = (7 - currentWeekday) + targetWeekday;}
+
+      return DateTime(now.year, now.month, now.day + daysToAdd);
+    }
+
+    for (int iDay = 1; iDay <= 7; iDay++) {
+      if (_selectedDays.contains(iDay)) {
+        _scheduledTimeList[iDay] = findNextDayOfWeek(iDay).add(Duration(hours:time.hour, minutes: time.minute));
+      } else {
+        _scheduledTimeList[iDay] = null;
+      }
+    }
     notifyListeners();
   }
 
   Future<void> addMedication() async {
     try {
-
       final Box medicationsBox = await Hive.openBox('medications');
 
       // Print out the data before adding it to Hive
@@ -73,7 +89,7 @@ class MedicationProvider extends ChangeNotifier {
       print('Type: $_selectedPillType');
       print('Days: $_selectedDays');
       print('Between Meals: $_betweenMeals');
-      print('Exact Time: $_exactTime');
+      print('Exact Time: $_scheduledTimeList');
 
       // Create data to be added to Hive
       Map<String, dynamic> data = {
@@ -81,7 +97,8 @@ class MedicationProvider extends ChangeNotifier {
         'type': _selectedPillType,
         'days': _selectedDays,
         'betweenMeals': _betweenMeals,
-        'exactTime': _exactTime?.toString(), // Storing TimeOfDay as String
+        'exactTime': _scheduledTimeList.toString(),
+        // Storing TimeOfDay as String
       };
 
       // Add medication data to Hive
@@ -94,10 +111,8 @@ class MedicationProvider extends ChangeNotifier {
       for (var i = 0; i < medicationsBox.length; i++) {
         print(medicationsBox.getAt(i));
       }
-
     } catch (e) {
       print('Error adding medication to Hive: $e');
     }
   }
-
 }

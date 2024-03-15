@@ -96,9 +96,10 @@ class HomescreenPage extends StatelessWidget {
         Medication medication = Medication(
           name: data['name'] ?? '',
           type: data['type'] ?? '',
-          days: List<String>.from(data['days'] ?? []),
+          // days: List<String>.from(data['days'] ?? []),
           betweenMeals: data['betweenMeals'] ?? '',
-          scheduledTime: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
+          // scheduledTimeList: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
+          scheduledTimeList: List.generate(7, (index) => DateTime.now()),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);

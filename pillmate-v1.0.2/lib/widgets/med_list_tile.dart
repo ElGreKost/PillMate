@@ -120,8 +120,8 @@ class _MedListTileState extends State<MedListTile> {
   }
 
   Widget _buildDefaultView() {
-    final double fillRatio =
-        calculateFillRatio(widget.medication.scheduledTime);
+    final double fillRatio = // todo make it fill according to the correct day
+        calculateFillRatio(widget.medication.scheduledTimeList[DateTime.now().weekday]!);
     final Color fillColor =
         appTheme.cyan500; // Use a primary theme color for fill
 
@@ -158,9 +158,10 @@ class _MedListTileState extends State<MedListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          DateFormat('h:mm a')
-                              .format(widget.medication.scheduledTime),
-                          style: TextStyle(fontSize: 12.v, color: Colors.grey)),
+                          DateFormat('HH:mm').format(widget.medication
+                              .scheduledTimeList[DateTime.now().weekday]!),
+                          style: TextStyle(
+                              fontSize: 12.v, color: appTheme.grey100)),
                       Text(widget.medication.name,
                           style: CustomTextStyles.headlineSmallBold),
                       SizedBox(height: 4.v),
@@ -256,8 +257,8 @@ class _MedListTileState extends State<MedListTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            DateFormat('h:mm a')
-                                .format(widget.medication.scheduledTime),
+                            DateFormat('HH:mm').format(widget.medication
+                                .scheduledTimeList[DateTime.now().weekday]!),
                             style:
                                 TextStyle(fontSize: 12.v, color: Colors.grey)),
                         Text(widget.medication.name,

@@ -4,31 +4,28 @@ import 'package:flutter/cupertino.dart';
 class Medication {
   final String name;
   final String type;
-  final List<String> days;
   final String betweenMeals;
-  final DateTime scheduledTime;
+  final List<DateTime?> scheduledTimeList;
   final IconData icon;
 
   Medication({
     required this.name,
     required this.type,
     required this.icon,
-    required this.days,
     required this.betweenMeals,
-    required this.scheduledTime,
+    required this.scheduledTimeList,
   });
 
 
 
 
-
+  // todo Yiannis upgrade this according to the List<DateTime>
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'type': type,
-      'days': days,
       'betweenMeals': betweenMeals,
-      'exactTime': scheduledTime.toString(), // Convert DateTime to String
+      'exactTime': scheduledTimeList.toString(), // Convert DateTime to String
     };
   }
 }
