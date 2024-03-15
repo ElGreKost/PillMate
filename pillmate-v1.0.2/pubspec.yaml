@@ -36,6 +36,7 @@ flutter:
   assets: 
     - assets/
     - assets/images/
+    - assets/medication_names1.txt
   fonts: 
     - family: Roboto
       fonts: 
