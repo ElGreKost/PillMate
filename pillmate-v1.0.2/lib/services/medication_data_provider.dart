@@ -18,7 +18,7 @@ class MedicationProvider extends ChangeNotifier {
 
   List<String> get selectedDays => _selectedDays;
 
-  String? _betweenMeals;
+  String? _betweenMeals = 'Anytime';
 
   String? get betweenMeals => _betweenMeals;
 

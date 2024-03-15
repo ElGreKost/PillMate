@@ -35,15 +35,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
 
   List<String> mealTimes = ['Before Meal', 'After Meal', 'Anytime'];
 
-  int _mealTimeIndex = 2;
+  int _mealTimeIndex = 2; // default for
 
   TimeOfDay _time = TimeOfDay.now();
-
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<MedicationProvider>(context, listen: false).setBetweenMeals(mealTimes[_mealTimeIndex]);
-  }
 
   void _showTimePickerDialog() {
     Navigator.of(context).push(
