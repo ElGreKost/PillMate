@@ -15,6 +15,8 @@ import '../../widgets/med_list_tile.dart';
 import 'widgets/custom_button_panel.dart';
 
 class PlanMedicationScreen extends StatefulWidget {
+  DateTime? repeatUntil;
+
   @override
   State<PlanMedicationScreen> createState() => _PlanMedicationScreenState();
 }
@@ -31,30 +33,11 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
     DayInWeek("Sun", dayKey: '7'),
   ];
 
-
-
   List<String> mealTimes = ['Before Meal', 'After Meal', 'Anytime'];
 
   int _mealTimeIndex = 2; // default for
 
   TimeOfDay _time = TimeOfDay.now();
-
-  void _showTimePickerDialog() {
-    Navigator.of(context).push(
-      showPicker(
-        context: context,
-        okStyle: TextStyle(color: appTheme.grey500, fontWeight: FontWeight.bold, fontSize: 24),
-        cancelStyle: TextStyle(color: appTheme.grey500, fontWeight: FontWeight.bold, fontSize: 24),
-        okText: 'Set',
-        blurredBackground: true,
-        value: Time(hour: _time.hour, minute: _time.minute),
-        onChange: (Time newTime) {
-          Provider.of<MedicationProvider>(context, listen: false).setExactTime(newTime);
-          setState(() => _time = TimeOfDay(hour: newTime.hour, minute: newTime.minute));
-        },
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +50,10 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Align(alignment: Alignment.bottomLeft, child: Text('Days of Week', style: theme.textTheme.displayMedium)),
+            Align(
+                alignment: Alignment.bottomLeft,
+                child:
+                    Text('Days of Week', style: theme.textTheme.displayMedium)),
             SizedBox(height: 8),
             SelectWeekDays(
               fontSize: 16,
@@ -76,7 +62,8 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
               border: false,
               boxDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                gradient: LinearGradient(colors: [appTheme.grey900, appTheme.cyan900]),
+                gradient: LinearGradient(
+                    colors: [appTheme.grey900, appTheme.cyan900]),
               ),
               onSelect: (values) => print('selected days: $values'),
             ),
@@ -87,8 +74,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: TextButton(
-                    onPressed: () {},
-                    child: Text('Repeat Weekly', style: TextStyle(color: appTheme.grey100)),
+                    onPressed: () => buildShowDatePicker(context),
+                    child: Text('Set End Date',
+                        style: TextStyle(color: appTheme.grey100)),
                   ),
                 ),
                 InkWell(
@@ -104,7 +92,10 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                       children: [
                         Icon(Icons.access_time, color: appTheme.cyan900),
                         SizedBox(width: 8),
-                        Text("Select Time", style: TextStyle(color: appTheme.cyan900, fontWeight: FontWeight.bold)),
+                        Text("Select Time",
+                            style: TextStyle(
+                                color: appTheme.cyan900,
+                                fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -116,7 +107,8 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                 labels: mealTimes,
                 selectedIndex: _mealTimeIndex,
                 onSelected: (index) {
-                  Provider.of<MedicationProvider>(context, listen: false).setBetweenMeals(mealTimes[index]);
+                  Provider.of<MedicationProvider>(context, listen: false)
+                      .setBetweenMeals(mealTimes[index]);
                   setState(() => _mealTimeIndex = index);
                 }),
             SizedBox(height: 24.v),
@@ -124,37 +116,75 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
               medication: Medication(
                 name: medicationProvider.selectedPillName ?? "Pill Name",
                 type: medicationProvider.selectedPillType ?? "Pill Type",
-                icon: medicationProvider.selectedPillIconData ?? Icons.medication,
+                icon:
+                    medicationProvider.selectedPillIconData ?? Icons.medication,
                 // Default icon if null
                 days: medicationProvider.selectedDays,
-                betweenMeals: medicationProvider.betweenMeals ?? "Meal Preference",
-                exactTime: medicationProvider.exactTime ?? DateTime.now(),
+                betweenMeals:
+                    medicationProvider.betweenMeals ?? "Meal Preference",
+                scheduledTime: medicationProvider.exactTime ?? DateTime.now(),
               ),
             ),
             SizedBox(height: 24.v),
-            Center(child: CustomElevatedButton(text: 'Launch Therapy', width: 250, onPressed: () => _onSavePressed()))
+            Center(
+                child: CustomElevatedButton(
+                    text: 'Launch Therapy',
+                    width: 250,
+                    onPressed: () => _onSavePressed()))
           ],
         ),
       ),
     );
   }
 
+  void _showTimePickerDialog() {
+    Navigator.of(context).push(
+      showPicker(
+        context: context,
+        okStyle: TextStyle(
+            color: appTheme.grey500, fontWeight: FontWeight.bold, fontSize: 24),
+        cancelStyle: TextStyle(
+            color: appTheme.grey500, fontWeight: FontWeight.bold, fontSize: 24),
+        okText: 'Set',
+        blurredBackground: true,
+        value: Time(hour: _time.hour, minute: _time.minute),
+        onChange: (Time newTime) {
+          Provider.of<MedicationProvider>(context, listen: false)
+              .setExactTime(newTime);
+          setState(() =>
+              _time = TimeOfDay(hour: newTime.hour, minute: newTime.minute));
+        },
+      ),
+    );
+  }
+
+  Future<void> buildShowDatePicker(BuildContext context) async {
+    widget.repeatUntil = await showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 5),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    );
+  }
+
   Future<void> _onSavePressed() async {
-    final medicationProvider = Provider.of<MedicationProvider>(context, listen: false);
-    final List<String> selectedDays = _days.where((day) => day.isSelected).map((day) => day.dayName).toList();
+    final medicationProvider =
+        Provider.of<MedicationProvider>(context, listen: false);
+    final List<String> selectedDays =
+        _days.where((day) => day.isSelected).map((day) => day.dayName).toList();
     medicationProvider.setSelectedDays(selectedDays);
     medicationProvider.setBetweenMeals(mealTimes[_mealTimeIndex]);
     final timeOfDay = medicationProvider.exactTime;
     print('Time to be taken is: $timeOfDay');
 
-    // Add new medication to local list for homescreen
+    // Add new medication to local list for home-screen
     var newMedication = Medication(
         name: medicationProvider.selectedPillName!,
         type: medicationProvider.selectedPillType!,
         icon: medicationProvider.selectedPillIconData!,
         days: medicationProvider.selectedDays,
         betweenMeals: medicationProvider.betweenMeals!,
-        exactTime: medicationProvider.exactTime!);
+        scheduledTime: medicationProvider.exactTime!);
     Provider.of<AppState>(context, listen: false).addMedication(newMedication);
 
     await medicationProvider.addMedication(); // Add medication to Firestore

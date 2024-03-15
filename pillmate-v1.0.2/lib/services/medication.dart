@@ -6,7 +6,7 @@ class Medication {
   final String type;
   final List<String> days;
   final String betweenMeals;
-  final DateTime exactTime;
+  final DateTime scheduledTime;
   final IconData icon;
 
   Medication({
@@ -15,7 +15,7 @@ class Medication {
     required this.icon,
     required this.days,
     required this.betweenMeals,
-    required this.exactTime, // Optional food instruction
+    required this.scheduledTime,
   });
 
 
@@ -28,7 +28,7 @@ class Medication {
       'type': type,
       'days': days,
       'betweenMeals': betweenMeals,
-      'exactTime': exactTime.toString(), // Convert DateTime to String
+      'exactTime': scheduledTime.toString(), // Convert DateTime to String
     };
   }
 }

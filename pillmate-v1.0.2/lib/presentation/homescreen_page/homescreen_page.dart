@@ -36,7 +36,7 @@ class HomescreenPage extends StatelessWidget {
           ],
         ),
         body: _buildMedList(context),
-        bottomNavigationBar: GNavWidget(),
+        // bottomNavigationBar: GNavWidget(),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
           child: Icon(Icons.add, color: Colors.white, size: 35.v),
@@ -98,7 +98,7 @@ class HomescreenPage extends StatelessWidget {
           type: data['type'] ?? '',
           days: List<String>.from(data['days'] ?? []),
           betweenMeals: data['betweenMeals'] ?? '',
-          exactTime: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
+          scheduledTime: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);

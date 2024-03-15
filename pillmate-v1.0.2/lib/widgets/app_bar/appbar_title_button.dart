@@ -30,7 +30,7 @@ class AppbarTitleButton extends StatelessWidget {
             text: "BOOK  APPOINTMENT",
             buttonStyle: CustomButtonStyles.fillCyan,
             buttonTextStyle: theme.textTheme.labelSmall!,
-        onPressed: () => print(Colors.blueGrey.toString()),
+        onPressed: () => showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime(2026)),
         ),
       ),
     );
