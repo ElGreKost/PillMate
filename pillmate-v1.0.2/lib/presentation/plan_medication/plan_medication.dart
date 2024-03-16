@@ -60,6 +60,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
               fontWeight: FontWeight.w600,
               days: _days,
               border: false,
+              daysFillColor: appTheme.teal100.withOpacity(0.2),
+              selectedDayTextColor: appTheme.grey100,
+              unSelectedDayTextColor: appTheme.grey100,
               boxDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
                 gradient: LinearGradient(
@@ -173,8 +176,31 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 5),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: appTheme.grey700, // Background & activated & selected
+              onPrimary: appTheme.teal500, // Activated num Color
+              onSurface: appTheme.grey100, // Neutral text base Color
+              onBackground: appTheme.grey100, // divider line
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: appTheme.teal900, // button text color
+              ),
+            ),
+            textTheme: TextTheme(
+              titleMedium: TextStyle(color: appTheme.cyan900), // day number style
+              labelLarge: TextStyle(color: appTheme.cyan500), // day name style
+            ),
+          ),
+          child: child ?? Text(''),
+        );
+      },
     );
   }
+
 
   Future<void> _onSavePressed() async {
     final medicationProvider =
