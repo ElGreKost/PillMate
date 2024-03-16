@@ -15,7 +15,7 @@ class SelectMedicationTypeScreen extends StatefulWidget {
     Key? key,
     this.medicationTypes = const [
       {'type': 'Pill', 'icon': FontAwesomeIcons.pills},
-      {'type': 'Solution', 'icon': Ionicons.flask},
+      {'type': 'Drink', 'icon': Ionicons.flask},
       {'type': 'Injection', 'icon': FontAwesomeIcons.syringe},
       {'type': 'Powder', 'icon': Icons.scatter_plot},
       {'type': 'Drops', 'icon': Icons.water_drop},

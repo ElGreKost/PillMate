@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
@@ -262,7 +263,9 @@ class _MedListTileState extends State<MedListTile> {
                     children: [
                       Text(
                           // DateFormat('HH:mm').format(widget.medication
-                          //     .scheduledTimeList[DateTime.now().weekday]!), todo fix it
+                          //     .scheduledTimeList[DateTime.now().weekday]!),
+                          // todo fix it the problem is that even though it exist it
+                          //  returns null
                           DateFormat('HH:mm').format(DateTime.now()),
                           style: TextStyle(
                               fontSize: 12.v, color: appTheme.grey100)),
@@ -314,7 +317,7 @@ class _MedListTileState extends State<MedListTile> {
                         .deleteMedication(widget.medication);
                   }),
                   SizedBox(width: 16.h),
-                  _buildIconButton(Icons.edit, "Edit", Colors.blue,
+                  _buildIconButton(LineIcons.medicalNotes, "Edit", Colors.blue,
                       () => setState(() => _isEditPressed = true)),
                   SizedBox(width: 16.h),
                   _buildIconButton(Icons.info, "Info", Colors.amber,
@@ -361,8 +364,9 @@ class _MedListTileState extends State<MedListTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            DateFormat('HH:mm').format(widget.medication
-                                .scheduledTimeList[DateTime.now().weekday]!),
+                            // DateFormat('HH:mm').format(widget.medication
+                            //     .scheduledTimeList[DateTime.now().weekday]!),
+                            DateFormat('HH:mm').format(DateTime.now()),
                             style:
                                 TextStyle(fontSize: 12.v, color: Colors.grey)),
                         Text(widget.medication.name,
