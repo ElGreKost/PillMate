@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:pillmate/widgets/bottom_navigation_bar.dart';
 import 'package:pillmate/core/app_export.dart';
-import 'package:pillmate/backend/app_state.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
 import '../../services/medication.dart';
 import '../../widgets/med_list_tile.dart';
@@ -92,14 +90,24 @@ class HomescreenPage extends StatelessWidget {
     for (var key in box.keys) {
       dynamic data = box.get(key);
       if (data is Map<dynamic, dynamic>) {
+
+        List<DateTime?>? retrieveDateTimeList() { // todo Yiannis implement this
+          final List<int?>? timestampList = box.get(key);
+          if (timestampList == null) return null;
+
+          return timestampList.map((timestamp) {
+            return timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp) : null;
+          }).toList();
+        }
+
+
         print('data printed is: ${data['name']}');
         Medication medication = Medication(
           name: data['name'] ?? '',
           type: data['type'] ?? '',
-          // days: List<String>.from(data['days'] ?? []),
           betweenMeals: data['betweenMeals'] ?? '',
-          // scheduledTimeList: data['exactTime'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
-          scheduledTimeList: List.generate(7, (index) => DateTime.now()),
+          // scheduledTimeList: data['scheduleTimes'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
+          scheduledTimeList: List.generate(7, (index) => DateTime.now().add(Duration(hours: 2))),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);

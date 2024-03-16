@@ -80,23 +80,27 @@ class _MedListTileState extends State<MedListTile> {
     }
   }
 
-  double calculateFillRatio(DateTime scheduledTime) {
+  double? calculateFillRatio(DateTime? scheduledTime) {
     final DateTime now = DateTime.now();
-    final DateTime startTime = scheduledTime
-        .subtract(Duration(hours: 12)); // 12 hours before the scheduled time
-
-    if (now.isBefore(startTime)) {
-      return 0.0; // Too early, no fill
-    } else if (now.isAfter(scheduledTime)) {
-      return 1.0; // Past the scheduled time, full fill
-    } else {
-      final double totalDuration =
-          scheduledTime.difference(startTime).inMinutes.toDouble();
-      final double elapsed = now.difference(startTime).inMinutes.toDouble();
-      return elapsed /
-          totalDuration; // Ratio of the fill based on the current time
+    if (scheduledTime == null) {
+      return null; // Medication is not scheduled for today.
     }
+
+    DateTime adjustedScheduledTime = DateTime(now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
+
+    // If the scheduled time is before now or more than 12 hours ahead, it's considered not scheduled for the current period.
+    if (adjustedScheduledTime.isBefore(now) || adjustedScheduledTime.isAfter(now.add(Duration(hours: 12)))) {
+      return null;
+    }
+
+    final DateTime startTime = adjustedScheduledTime.subtract(Duration(hours: 12));
+    final double totalDuration = adjustedScheduledTime.difference(startTime).inMinutes.toDouble();
+    final double elapsed = now.difference(startTime).inMinutes.toDouble();
+
+    return elapsed / totalDuration;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +118,113 @@ class _MedListTileState extends State<MedListTile> {
                 ? _buildExpandedView()
                 : _isLongPressed
                     ? _buildLongPressView()
-                    : _buildDefaultView(),
+                    : _buildViewBasedOnSchedule(),
       ),
     );
   }
 
-  Widget _buildDefaultView() {
-    final double fillRatio = // todo make it fill according to the correct day
-        calculateFillRatio(widget.medication.scheduledTimeList[DateTime.now().weekday]!);
+  Widget _buildViewBasedOnSchedule() {
+    DateTime? todayScheduledTime = widget.medication.scheduledTimeList[DateTime.now().weekday - 1];
+
+    // Use the modified calculateFillRatio to also check for scheduling within 12 hours
+    double? fillRatio = calculateFillRatio(todayScheduledTime);
+
+    if (fillRatio == null) {
+      // Display "Not Scheduled for Current Period" view
+      return _buildNotScheduledTodayView(); // This can be renamed to reflect "not in the next 12 hours" if you like
+    } else {
+      // Proceed with the normal "Default View" using the fill ratio
+      return _buildDefaultView(fillRatio);
+    }
+  }
+
+
+  // Widget _buildDefaultOrNotScheduledView() {
+  //   DateTime? todayScheduledTime = widget.medication.scheduledTimeList[DateTime.now().weekday - 1]; // Weekday is 1-based
+  //
+  //   if (todayScheduledTime == null) {
+  //     // Display "Not Scheduled Today" view
+  //     return _buildNotScheduledTodayView();
+  //   } else {
+  //     // Proceed with the normal "Default View" using todayScheduledTime
+  //     final double fillRatio = calculateFillRatio(todayScheduledTime);
+  //     final Color fillColor = appTheme.cyan500;
+  //
+  //     return Container(
+  //       key: ValueKey('defaultView'),
+  //       decoration: AppDecoration.white,
+  //       child: Stack(
+  //         children: [
+  //           Positioned.fill(
+  //             child: Align(
+  //               alignment: Alignment.centerLeft,
+  //               child: FractionallySizedBox(
+  //                 widthFactor: fillRatio,
+  //                 child: Container(
+  //                   decoration: BoxDecoration(
+  //                       color: fillColor.withOpacity(0.5),
+  //                       borderRadius: BorderRadius.circular(30.h)),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               Padding(
+  //                 padding: EdgeInsets.symmetric(horizontal: 12.h),
+  //                 child: Icon(widget.medication.icon,
+  //                     size: 48.h, color: appTheme.cyan500),
+  //               ),
+  //               Expanded(
+  //                 child: Padding(
+  //                   padding: EdgeInsets.symmetric(vertical: 6.v),
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(
+  //                         // DateFormat('HH:mm').format(widget.medication
+  //                         //     .scheduledTimeList[DateTime.now().weekday]!), todo fix it
+  //                           DateFormat('HH:mm').format(DateTime.now()),
+  //                           style: TextStyle(
+  //                               fontSize: 12.v, color: appTheme.grey100)),
+  //                       Text(widget.medication.name,
+  //                           style: CustomTextStyles.headlineSmallBold),
+  //                       SizedBox(height: 4.v),
+  //                       Text(
+  //                           "1 ${widget.medication.type} \t ${widget.medication.betweenMeals}",
+  //                           style: theme.textTheme.titleMedium),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
+
+  Widget _buildNotScheduledTodayView() {
+    return Container(
+      key: ValueKey('notScheduledTodayView'),
+      decoration: AppDecoration.white,
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(widget.medication.icon, size: 48, color: Colors.grey), // Example icon
+          Text(widget.medication.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("Not scheduled for today", style: TextStyle(fontSize: 16, color: Colors.grey)),
+          // You can add more details or styling as needed
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildDefaultView(double fillRatio) {
     final Color fillColor =
         appTheme.cyan500; // Use a primary theme color for fill
 
@@ -158,8 +261,9 @@ class _MedListTileState extends State<MedListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          DateFormat('HH:mm').format(widget.medication
-                              .scheduledTimeList[DateTime.now().weekday]!),
+                          // DateFormat('HH:mm').format(widget.medication
+                          //     .scheduledTimeList[DateTime.now().weekday]!), todo fix it
+                          DateFormat('HH:mm').format(DateTime.now()),
                           style: TextStyle(
                               fontSize: 12.v, color: appTheme.grey100)),
                       Text(widget.medication.name,

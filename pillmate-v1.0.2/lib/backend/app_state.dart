@@ -29,6 +29,7 @@ class AppState with ChangeNotifier {
 
   void addMedication(Medication med) {
     medList.add(med);
+    print(med.scheduledTimeList);
     notifyListeners();
   }
   

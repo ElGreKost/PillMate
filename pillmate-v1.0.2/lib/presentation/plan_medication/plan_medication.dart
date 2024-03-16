@@ -33,9 +33,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
     DayInWeek("Sun", dayKey: '7'),
   ];
 
-  List<String> mealTimes = ['Before Meal', 'After Meal', 'Anytime'];
+  List<String> mealTimes = ['Before Meal', 'During Meal', 'After Meal', 'Anytime'];
 
-  int _mealTimeIndex = 2; // default for
+  int _mealTimeIndex = 3; // default for
 
   TimeOfDay _time = TimeOfDay.now();
 
@@ -65,9 +65,15 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                 gradient: LinearGradient(
                     colors: [appTheme.grey900, appTheme.cyan900]),
               ),
-              onSelect: (selectedDays) =>
-                  Provider.of<MedicationProvider>(context, listen: false)
-                      .setSelectedDays(selectedDays),
+              onSelect: (selectedDays) {
+
+                List<int> selectedDaysInt = [];
+                for (var string in selectedDays) {
+                  selectedDaysInt.add(int.parse(string));
+                }
+                Provider.of<MedicationProvider>(context, listen: false)
+                      .setSelectedDays(selectedDaysInt);
+              },
             ),
             SizedBox(height: 24.v),
             Row(
@@ -124,8 +130,7 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                 // days: medicationProvider.selectedDays,
                 betweenMeals:
                     medicationProvider.betweenMeals ?? "Meal Preference",
-                scheduledTimeList: medicationProvider.scheduledTimeList ??
-                    List.generate(7, (index) => DateTime.now()),
+                scheduledTimeList: medicationProvider.scheduledTimeList
               ),
             ),
             SizedBox(height: 24.v),
@@ -152,8 +157,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         blurredBackground: true,
         value: Time(hour: _time.hour, minute: _time.minute),
         onChange: (Time newTime) {
-          // Provider.of<MedicationProvider>(context, listen: false)
-          //     .setScheduledTimeList(newTime);
+          // print(newTime);
+          Provider.of<MedicationProvider>(context, listen: false)
+              .setScheduledTimeList(newTime);
           setState(() =>
               _time = TimeOfDay(hour: newTime.hour, minute: newTime.minute));
         },
@@ -173,10 +179,6 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
   Future<void> _onSavePressed() async {
     final medicationProvider =
         Provider.of<MedicationProvider>(context, listen: false);
-    final List<String> selectedDays =
-        _days.where((day) => day.isSelected).map((day) => day.dayName).toList();
-    // medicationProvider.setSelectedDays(selectedDays);
-    medicationProvider.setSelectedDays([1, 2, 3, 4]);
     medicationProvider.setBetweenMeals(mealTimes[_mealTimeIndex]);
     final timeOfDay = medicationProvider.scheduledTimeList;
     print('Time to be taken is: $timeOfDay');
@@ -187,7 +189,7 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         type: medicationProvider.selectedPillType!,
         icon: medicationProvider.selectedPillIconData!,
         betweenMeals: medicationProvider.betweenMeals!,
-        scheduledTimeList: medicationProvider.scheduledTimeList!);
+        scheduledTimeList: medicationProvider.scheduledTimeList);
     Provider.of<AppState>(context, listen: false).addMedication(newMedication);
 
     await medicationProvider.addMedication(); // Add medication to Firestore

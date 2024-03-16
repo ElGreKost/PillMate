@@ -19,9 +19,9 @@ class CustomButtonPanel extends StatefulWidget {
 class _CustomButtonPanelState extends State<CustomButtonPanel> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min, // Ensure the Row doesn't stretch
-      mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+    return Wrap(
+      direction: Axis.horizontal,
+      alignment: WrapAlignment.center,
       children: List<Widget>.generate(widget.labels.length, (int index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),

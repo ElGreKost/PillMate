@@ -14,7 +14,7 @@ class MedicationProvider extends ChangeNotifier {
 
   IconData? get selectedPillIconData => _selectedPillIconData;
 
-  List<int> _selectedDays = List.generate(10, (index) => 0);
+  List<int> _selectedDays = List.generate(7, (index) => 0);
 
   List<int> get selectedDays => _selectedDays;
 
@@ -22,7 +22,7 @@ class MedicationProvider extends ChangeNotifier {
 
   String? get betweenMeals => _betweenMeals;
 
-  List<DateTime?> _scheduledTimeList = [];
+  List<DateTime?> _scheduledTimeList = List.generate(7, (index) => null);
 
   List<DateTime?> get scheduledTimeList => _scheduledTimeList;
 
@@ -55,7 +55,7 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   // Method to set exact time
-  void setScheduledTimeList(List<int> activeDays, TimeOfDay time) {
+  void setScheduledTimeList(TimeOfDay time) {
     DateTime findNextDayOfWeek(int targetWeekday) {
       DateTime now = DateTime.now();
       int currentWeekday = now.weekday;
@@ -69,11 +69,11 @@ class MedicationProvider extends ChangeNotifier {
       return DateTime(now.year, now.month, now.day + daysToAdd);
     }
 
-    for (int iDay = 1; iDay <= 7; iDay++) {
-      if (_selectedDays.contains(iDay)) {
-        _scheduledTimeList[iDay] = findNextDayOfWeek(iDay).add(Duration(hours:time.hour, minutes: time.minute));
+    for (int iWeekday = 1; iWeekday <= 7; iWeekday++) {
+      if (_selectedDays.contains(iWeekday)) {
+        _scheduledTimeList[iWeekday-1] = findNextDayOfWeek(iWeekday).add(Duration(hours:time.hour, minutes: time.minute));
       } else {
-        _scheduledTimeList[iDay] = null;
+        _scheduledTimeList[iWeekday-1] = null;
       }
     }
     notifyListeners();
@@ -97,7 +97,7 @@ class MedicationProvider extends ChangeNotifier {
         'type': _selectedPillType,
         'days': _selectedDays,
         'betweenMeals': _betweenMeals,
-        'exactTime': _scheduledTimeList.toString(),
+        'scheduledTimes': _scheduledTimeList.map((dateTime) => dateTime?.millisecondsSinceEpoch).toList(),
         // Storing TimeOfDay as String
       };
 
