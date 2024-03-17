@@ -8,6 +8,7 @@ import '../../widgets/custom_elevated_button.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+
 class SelectMedicationTypeScreen extends StatefulWidget {
   final List<Map<String, dynamic>> medicationTypes;
 

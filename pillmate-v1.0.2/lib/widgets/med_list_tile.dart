@@ -7,6 +7,30 @@ import 'package:hive/hive.dart';
 import '../backend/app_state.dart';
 import '../services/medication.dart'; // Adjust the import paths as necessary.
 import 'package:flutter/foundation.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+IconData getIconForMedicationType(String type) {
+  print('Medication type: $type');
+  switch (type) {
+    case 'Pill':
+      return FontAwesomeIcons.pills;
+    case 'Drink':
+      return Ionicons.flask;
+    case 'Injection':
+      return FontAwesomeIcons.syringe;
+    case 'Powder':
+      return Icons.scatter_plot;
+    case 'Drops':
+      return Icons.water_drop;
+    case 'Other':
+      return Icons.medical_services;
+    default:
+    // Return a default icon in case the type is not found
+      return Icons.error_outline;
+  }
+}
+
 
 bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
 // Compare the values of each key in the maps
@@ -252,7 +276,7 @@ class _MedListTileState extends State<MedListTile> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.h),
-                child: Icon(widget.medication.icon,
+                child: Icon(getIconForMedicationType(widget.medication.type),
                     size: 48.h, color: appTheme.cyan500),
               ),
               Expanded(
