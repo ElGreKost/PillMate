@@ -1,8 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
 import '../../services/medication.dart';
+import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/med_list_tile.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
@@ -15,7 +17,7 @@ class HomescreenPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leadingWidth: 49.h,
-          backgroundColor: Colors.transparent,
+          backgroundColor: appTheme.grey900,
           leading: IconButton(
             onPressed: () => Navigator.pushNamed(context, AppRoutes.settingsScreen),
             icon: Icon(Icons.settings, color: appTheme.cyan500),
@@ -70,6 +72,11 @@ class HomescreenPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
+              CustomElevatedButton(
+                text: 'Notification',
+                onPressed: () => createPillReminderNotification(10, 'DepoNaki'),
+              ),
+              SizedBox(height: 8),
               SizedBox(height: 8),
               Expanded(
                 child: ListView.separated(
@@ -87,6 +94,30 @@ class HomescreenPage extends StatelessWidget {
       },
     );
   }
+
+  // Define a function to create a customized notification
+  void createPillReminderNotification(int notificationId, String medicationName) {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: notificationId,
+        channelKey: 'basic_channel', // Make sure this channel is defined in your AwesomeNotifications initialization
+        title: '$medicationName Time',
+        body: 'Time to take your $medicationName.',
+        actionType: ActionType.Default,
+      ),
+
+      actionButtons: [
+        NotificationActionButton(
+          key: 'MARK_TAKEN',
+          label: 'Mark as Taken',
+          actionType: ActionType.Default,
+          color: appTheme.teal500,
+          // buttonType: ActionButtonType.Default,
+        ),
+      ],
+    );
+  }
+
 
   List<Medication> _getAllMedications(Box box) {
     List<Medication> allMedications = [];

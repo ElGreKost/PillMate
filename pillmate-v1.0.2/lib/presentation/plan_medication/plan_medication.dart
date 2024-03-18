@@ -10,6 +10,7 @@ import '../../services/medication_data_provider.dart';
 import 'package:provider/provider.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/theme_helper.dart';
+import '../../utils/notifications_utils.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/med_list_tile.dart';
 import 'widgets/custom_button_panel.dart';
@@ -61,7 +62,7 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                     Text('Days of Week', style: theme.textTheme.displayMedium)),
             SizedBox(height: 8),
             SelectWeekDays(
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               days: _days,
               border: false,
@@ -234,6 +235,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         betweenMeals: medicationProvider.betweenMeals!,
         scheduledTimeList: medicationProvider.scheduledTimeList);
     Provider.of<AppState>(context, listen: false).addMedication(newMedication);
+    
+    // Create Notifications for Medication
+    NotificationUtils.scheduleMedicationNotifications(newMedication);
 
     await medicationProvider.addMedication(); // Add medication to Firestore
     Navigator.pushNamed(context, AppRoutes.homescreenPage);
