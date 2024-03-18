@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
@@ -9,7 +10,6 @@ import '../services/medication.dart'; // Adjust the import paths as necessary.
 import 'package:flutter/foundation.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 
 TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
   for (var time in times) {
@@ -36,11 +36,10 @@ IconData getIconForMedicationType(String type) {
     case 'Other':
       return Icons.medical_services;
     default:
-    // Return a default icon in case the type is not found
+      // Return a default icon in case the type is not found
       return Icons.error_outline;
   }
 }
-
 
 bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
   // Compare the values of each key in map1 and map2
@@ -69,8 +68,10 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
   map1.remove('days');
 
   // Compare the 'scheduledTimeList' field after comparing other fields
-  List<dynamic>? scheduledTimeList1 = map1['scheduledTimeList'] as List<dynamic>?;
-  List<dynamic>? scheduledTimeList2 = map2['scheduledTimeList'] as List<dynamic>?;
+  List<dynamic>? scheduledTimeList1 =
+      map1['scheduledTimeList'] as List<dynamic>?;
+  List<dynamic>? scheduledTimeList2 =
+      map2['scheduledTimeList'] as List<dynamic>?;
 
   if (!listEquals(scheduledTimeList1, scheduledTimeList2)) {
     print('${scheduledTimeList1} neq ${scheduledTimeList2}');
@@ -80,9 +81,6 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
   // If all values in map1 match map2, return true
   return true;
 }
-
-
-
 
 class MedListTile extends StatefulWidget {
   final Medication medication;
@@ -120,6 +118,17 @@ class _MedListTileState extends State<MedListTile> {
           }
         }
       }
+      @override
+      void initState() {
+        super.initState();
+        scheduleMedicationNotifications();
+      }
+
+      @override
+      void dispose() {
+        super.dispose();
+        AwesomeNotifications().cancel(widget.medication.notificationId);
+      }
 
       if (medicationKey != null) {
         // Delete the medication from the box
@@ -141,21 +150,23 @@ class _MedListTileState extends State<MedListTile> {
       return null; // Medication is not scheduled for today.
     }
 
-    DateTime adjustedScheduledTime = DateTime(now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
+    DateTime adjustedScheduledTime = DateTime(
+        now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
 
     // If the scheduled time is before now or more than 12 hours ahead, it's considered not scheduled for the current period.
-    if (adjustedScheduledTime.isBefore(now) || adjustedScheduledTime.isAfter(now.add(Duration(hours: 12)))) {
+    if (adjustedScheduledTime.isBefore(now) ||
+        adjustedScheduledTime.isAfter(now.add(Duration(hours: 12)))) {
       return null;
     }
 
-    final DateTime startTime = adjustedScheduledTime.subtract(Duration(hours: 12));
-    final double totalDuration = adjustedScheduledTime.difference(startTime).inMinutes.toDouble();
+    final DateTime startTime =
+        adjustedScheduledTime.subtract(Duration(hours: 12));
+    final double totalDuration =
+        adjustedScheduledTime.difference(startTime).inMinutes.toDouble();
     final double elapsed = now.difference(startTime).inMinutes.toDouble();
 
     return elapsed / totalDuration;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +190,8 @@ class _MedListTileState extends State<MedListTile> {
   }
 
   Widget _buildViewBasedOnSchedule() {
-    DateTime? todayScheduledTime = widget.medication.scheduledTimeList[DateTime.now().weekday - 1];
+    DateTime? todayScheduledTime =
+        widget.medication.scheduledTimeList[DateTime.now().weekday - 1];
 
     // Use the modified calculateFillRatio to also check for scheduling within 12 hours
     double? fillRatio = calculateFillRatio(todayScheduledTime);
@@ -192,7 +204,6 @@ class _MedListTileState extends State<MedListTile> {
       return _buildDefaultView(fillRatio);
     }
   }
-
 
   // Widget _buildDefaultOrNotScheduledView() {
   //   DateTime? todayScheduledTime = widget.medication.scheduledTimeList[DateTime.now().weekday - 1]; // Weekday is 1-based
@@ -269,9 +280,12 @@ class _MedListTileState extends State<MedListTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(getIconForMedicationType(widget.medication.type), size: 48, color: Colors.grey), // Example icon
-          Text(widget.medication.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Text("Not scheduled for today", style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Icon(getIconForMedicationType(widget.medication.type),
+              size: 48, color: Colors.grey), // Example icon
+          Text(widget.medication.name,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("Not scheduled for today",
+              style: TextStyle(fontSize: 16, color: Colors.grey)),
           // You can add more details or styling as needed
         ],
       ),
@@ -279,13 +293,15 @@ class _MedListTileState extends State<MedListTile> {
   }
 
   Widget _buildDefaultView(double fillRatio) {
-    final Color fillColor = appTheme.cyan500; // Use a primary theme color for fill
+    final Color fillColor =
+        appTheme.cyan500; // Use a primary theme color for fill
 
     // Convert List<DateTime?> to List<TimeOfDay?>
     List<DateTime?> scheduledTimes = widget.medication.scheduledTimeList;
 
     // Find the first non-null scheduled time
-    DateTime? firstNonNullTime = scheduledTimes.firstWhere((time) => time != null, orElse: () => null);
+    DateTime? firstNonNullTime =
+        scheduledTimes.firstWhere((time) => time != null, orElse: () => null);
 
     return Container(
       key: ValueKey('defaultView'),
@@ -341,9 +357,6 @@ class _MedListTileState extends State<MedListTile> {
       ),
     );
   }
-
-
-
 
   Widget _buildLongPressView() {
     return GestureDetector(
@@ -516,5 +529,44 @@ class _MedListTileState extends State<MedListTile> {
         color: color,
         tooltip: tooltip,
         onPressed: onPressed);
+  }
+
+  void scheduleMedicationNotifications() {
+    // Helper function to schedule a notification
+    void scheduleNotification(
+        {required bool isAfterScheduled,
+        required Duration timeInterval,
+        required String messageSuffix}) {
+      List<DateTime?> scheduledTimeList = widget.medication.scheduledTimeList;
+      for (DateTime? scheduledTime
+          in scheduledTimeList.where((time) => time != null)) {
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: widget.medication.notificationId,
+            // Ensure this ID is unique for each notification
+            channelKey: 'basic_channel',
+            title: '${widget.medication.name} Time',
+            body: 'Time to take your ${widget.medication.type}. $messageSuffix',
+          ),
+          schedule: NotificationCalendar.fromDate(
+              date: isAfterScheduled
+                  ? scheduledTime!.add(timeInterval)
+                  : scheduledTime!.subtract(timeInterval)),
+        );
+      }
+    }
+
+    scheduleNotification(
+        isAfterScheduled: false,
+        timeInterval: Duration(minutes: 10),
+        messageSuffix: 'Scheduled in 10 minutes.');
+    scheduleNotification(
+        isAfterScheduled: false,
+        timeInterval: Duration.zero,
+        messageSuffix: 'It\'s time for your medication');
+    scheduleNotification(
+        isAfterScheduled: true,
+        timeInterval: Duration(minutes: 10),
+        messageSuffix: 'Scheduled before 10 minutes.');
   }
 }
