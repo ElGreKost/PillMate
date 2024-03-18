@@ -45,14 +45,27 @@ IconData getIconForMedicationType(String type) {
 bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
 // Compare the values of each key in the maps
   for (var key in map1.keys) {
+    if(key == 'days') continue;
+    if(key == 'scheduledTimes'){
+      print('let us check');
+      List<dynamic>? scheduledTimeList1 = map1['scheduledTimes'] as List<dynamic>?;
+      List<dynamic>? scheduledTimeList2 = map2['scheduledTimeList'] as List<dynamic>?;
+      if(listEquals(scheduledTimeList1,scheduledTimeList2)) return true;
+      else {
+        print('${map1[key]} neq');
+        return false;
+      }
+    }
     // Check if the values are lists and compare them using listEquals
     if (map1[key] is List && map2[key] is List) {
       if (!listEquals(map1[key], map2[key])) {
+        print('${map1[key]} neq ${map2[key]}');
         return false;
       }
     } else {
       // For non-list values, compare directly
       if (map1[key] != map2[key]) {
+        print('${map1[key]} neq ${map2[key]}');
         return false;
       }
     }
@@ -89,10 +102,10 @@ class _MedListTileState extends State<MedListTile> {
           print('$storedData');
           final Map<String, dynamic> storedMap =
               Map<String, dynamic>.from(storedData);
-          print('$storedMap');
+          print('Data examined:${storedMap}');
           final Map<String, dynamic> medicationDataMap =
               medicationData as Map<String, dynamic>;
-          print('$medicationDataMap');
+          print('Data to be deleted: ${medicationDataMap}');
           if (areMapsEqual(storedMap, medicationDataMap)) {
             print('found');
             medicationKey = key;

@@ -108,6 +108,8 @@ class _SelectMedicationTypeScreenState extends State<SelectMedicationTypeScreen>
                         .setSelectedPillType(_selectedMedicationTypeData!["type"]);
                     Provider.of<MedicationProvider>(context, listen: false)
                         .setSelectedPillIconData(_selectedMedicationTypeData!["icon"]);
+                    String? name = medicationProvider.selectedPillName;
+                    print('Name is: $name');
                     Navigator.pushNamed(context, AppRoutes.modernSelectDay);
                   },
                   text: 'Next',

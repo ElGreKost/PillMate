@@ -7,6 +7,29 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+Future<void> deleteMedicationWithName(String name) async {
+  final Box medicationsBox = Hive.box('medications');
+
+  // Iterate over the items in the box
+  for (var key in medicationsBox.keys) {
+    dynamic data = medicationsBox.get(key);
+
+    // Check if the item is a Map<dynamic, dynamic>
+    if (data is Map<dynamic, dynamic>) {
+      // Check if the name matches
+      if (data['name'] == name) {
+        // Delete the item from the box
+        await medicationsBox.delete(key);
+        print('Medication with name $name deleted successfully!');
+        return; // Exit the function after deleting the medication
+      }
+    }
+    else print('type is: ${data.runtimeType}');
+  }
+
+  // If no medication with the specified name is found
+  print('Medication with name $name not found in the box.');
+}
 
 Future<String> _getHiveStorageDirectory() async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -24,6 +47,7 @@ void main() async {
   await Hive.initFlutter(hiveStorageDirectory);
 
   await Hive.openBox('medications');
+
 
   ThemeHelper().changeTheme('primary');
   runApp(MyApp());

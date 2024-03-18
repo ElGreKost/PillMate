@@ -80,6 +80,9 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                 }
                 Provider.of<MedicationProvider>(context, listen: false)
                     .setSelectedDays(selectedDaysInt);
+                String? name = medicationProvider.selectedPillName;
+                String? type = medicationProvider.selectedPillType;
+                print('name is $name and type is: $type');
               },
             ),
             SizedBox(height: 24.v),

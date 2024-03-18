@@ -6,23 +6,32 @@ import '../../services/medication_data_provider.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_field.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class SelectPillName extends StatefulWidget {
   @override
   State<SelectPillName> createState() => _SelectPillNameState();
 }
 
-class _SelectPillNameState extends State<SelectPillName> {
-  final List<String> _medicationNames = [
-    'Ibuprofen',
-    'Paracetamol',
-    'Amoxicillin',
-    'Aspirin',
-    // Add more as needed
-  ];
 
+class _SelectPillNameState extends State<SelectPillName> {
+  List<String> _medicationNames = [];
   bool _isValidSelection = false;
 
+  @override
+  void initState() {
+    super.initState();
+    loadMedicationNames();
+  }
+
+  Future<void> loadMedicationNames() async {
+    String medicationNamesString =
+    await rootBundle.loadString('assets/medication_names1.txt');
+    setState(() {
+      _medicationNames =
+          medicationNamesString.split('\n').map((name) => name.trim()).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +65,6 @@ class _SelectPillNameState extends State<SelectPillName> {
                   FocusNode fieldFocusNode,
                   VoidCallback onFieldSubmitted,
                   ) {
-                // Add listener to text editing controller
                 fieldTextEditingController.addListener(() {
                   final currentText = fieldTextEditingController.text;
                   if (_medicationNames.contains(currentText)) {
@@ -77,10 +85,7 @@ class _SelectPillNameState extends State<SelectPillName> {
                   name: "Medication Name",
                   prefixIcon: LineIcons.pills,
                   inputType: TextInputType.text,
-                  onChanged: (value) {
-                    // This is no longer needed since we have the listener above
-                    // but if you want to keep it for other purposes, you can.
-                  },
+                  onChanged: (value) {},
                 );
               },
               optionsViewBuilder: (BuildContext context,
@@ -128,3 +133,4 @@ class _SelectPillNameState extends State<SelectPillName> {
     );
   }
 }
+
