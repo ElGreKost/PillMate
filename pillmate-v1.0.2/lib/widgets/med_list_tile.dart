@@ -43,8 +43,13 @@ IconData getIconForMedicationType(String type) {
 
 
 bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
-// Compare the values of each key in the maps
+  // Compare the values of each key in map1 and map2
+  map1.remove('days');
+
   for (var key in map1.keys) {
+    // Skip comparison of scheduledTimeList field
+    if (key == 'scheduledTimes') continue;
+
     // Check if the values are lists and compare them using listEquals
     if (map1[key] is List && map2[key] is List) {
       if (!listEquals(map1[key], map2[key])) {
@@ -58,9 +63,26 @@ bool areMapsEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
     }
   }
 
-// If all values are equal, return true
+  // Convert scheduledTimes field in map1 to scheduledTimeList
+  map1['scheduledTimeList'] = map1['scheduledTimes'];
+  map1.remove('scheduledTimes');
+  map1.remove('days');
+
+  // Compare the 'scheduledTimeList' field after comparing other fields
+  List<dynamic>? scheduledTimeList1 = map1['scheduledTimeList'] as List<dynamic>?;
+  List<dynamic>? scheduledTimeList2 = map2['scheduledTimeList'] as List<dynamic>?;
+
+  if (!listEquals(scheduledTimeList1, scheduledTimeList2)) {
+    print('${scheduledTimeList1} neq ${scheduledTimeList2}');
+    return false;
+  }
+
+  // If all values in map1 match map2, return true
   return true;
 }
+
+
+
 
 class MedListTile extends StatefulWidget {
   final Medication medication;
@@ -86,15 +108,13 @@ class _MedListTileState extends State<MedListTile> {
       for (var key in medicationsBox.keys) {
         final storedData = medicationsBox.get(key);
         if (storedData != null && storedData is Map<dynamic, dynamic>) {
-          print('$storedData');
           final Map<String, dynamic> storedMap =
               Map<String, dynamic>.from(storedData);
-          print('$storedMap');
+
           final Map<String, dynamic> medicationDataMap =
               medicationData as Map<String, dynamic>;
-          print('$medicationDataMap');
+
           if (areMapsEqual(storedMap, medicationDataMap)) {
-            print('found');
             medicationKey = key;
             break; // Break the loop once the key is found
           }
@@ -249,7 +269,7 @@ class _MedListTileState extends State<MedListTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(widget.medication.icon, size: 48, color: Colors.grey), // Example icon
+          Icon(getIconForMedicationType(widget.medication.type), size: 48, color: Colors.grey), // Example icon
           Text(widget.medication.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           Text("Not scheduled for today", style: TextStyle(fontSize: 16, color: Colors.grey)),
           // You can add more details or styling as needed

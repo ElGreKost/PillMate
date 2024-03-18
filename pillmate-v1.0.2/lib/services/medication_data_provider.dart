@@ -106,7 +106,7 @@ class MedicationProvider extends ChangeNotifier {
         'type': _selectedPillType,
         'days': _selectedDays,
         'betweenMeals': _betweenMeals,
-        'scheduledTimes': _scheduledTimeList.map((dateTime) => dateTime?.millisecondsSinceEpoch).toList(),
+        'scheduledTimeList': _scheduledTimeList.map((dateTime) => dateTime?.millisecondsSinceEpoch).toList(),
         // Storing TimeOfDay as String
       };
 
