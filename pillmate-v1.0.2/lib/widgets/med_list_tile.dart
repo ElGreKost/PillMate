@@ -10,6 +10,16 @@ import 'package:flutter/foundation.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+
+TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
+  for (var time in times) {
+    if (time != null) {
+      return time;
+    }
+  }
+  return null; // Return null if no non-null time is found
+}
+
 IconData getIconForMedicationType(String type) {
   print('Medication type: $type');
   switch (type) {
@@ -248,10 +258,14 @@ class _MedListTileState extends State<MedListTile> {
     );
   }
 
-
   Widget _buildDefaultView(double fillRatio) {
-    final Color fillColor =
-        appTheme.cyan500; // Use a primary theme color for fill
+    final Color fillColor = appTheme.cyan500; // Use a primary theme color for fill
+
+    // Convert List<DateTime?> to List<TimeOfDay?>
+    List<DateTime?> scheduledTimes = widget.medication.scheduledTimeList;
+
+    // Find the first non-null scheduled time
+    DateTime? firstNonNullTime = scheduledTimes.firstWhere((time) => time != null, orElse: () => null);
 
     return Container(
       key: ValueKey('defaultView'),
@@ -286,11 +300,9 @@ class _MedListTileState extends State<MedListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          // DateFormat('HH:mm').format(widget.medication
-                          //     .scheduledTimeList[DateTime.now().weekday]!),
-                          // todo fix it the problem is that even though it exist it
-                          //  returns null
-                          DateFormat('HH:mm').format(DateTime.now()),
+                          firstNonNullTime != null
+                              ? DateFormat('HH:mm').format(firstNonNullTime!)
+                              : 'No scheduled time',
                           style: TextStyle(
                               fontSize: 12.v, color: appTheme.grey100)),
                       Text(widget.medication.name,
@@ -309,6 +321,9 @@ class _MedListTileState extends State<MedListTile> {
       ),
     );
   }
+
+
+
 
   Widget _buildLongPressView() {
     return GestureDetector(

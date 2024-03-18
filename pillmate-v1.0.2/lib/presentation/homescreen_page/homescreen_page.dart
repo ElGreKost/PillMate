@@ -52,7 +52,10 @@ class HomescreenPage extends StatelessWidget {
         print('All medications:');
         medications.forEach((medication) {
           print(medication.name);
-        });
+          print('Scheduled timelist is: ${medication.scheduledTimeList}');
+        }
+        );print('finished with meds');
+
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
           child: Column(
@@ -87,18 +90,28 @@ class HomescreenPage extends StatelessWidget {
 
   List<Medication> _getAllMedications(Box box) {
     List<Medication> allMedications = [];
+
     for (var key in box.keys) {
+
       dynamic data = box.get(key);
+
       if (data is Map<dynamic, dynamic>) {
 
-        List<DateTime?>? retrieveDateTimeList() { // todo Yiannis implement this
-          final List<int?>? timestampList = box.get(key);
-          if (timestampList == null) return null;
+        List<DateTime?> retrieveDateTimeList(Map<dynamic, dynamic> data) {
+          final List<dynamic>? timestampList = data['scheduledTimes'] as List<dynamic>?;
 
-          return timestampList.map((timestamp) {
-            return timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp) : null;
+          if (timestampList == null) return [];
+
+          return timestampList.map((dynamic timestamp) {
+            if (timestamp is int) {
+              return DateTime.fromMillisecondsSinceEpoch(timestamp);
+            } else {
+              return null; // Or any other appropriate action
+            }
           }).toList();
         }
+
+
 
 
         print('data printed is: ${data['name']}');
@@ -107,7 +120,7 @@ class HomescreenPage extends StatelessWidget {
           type: data['type'] ?? '',
           betweenMeals: data['betweenMeals'] ?? '',
           // scheduledTimeList: data['scheduleTimes'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
-          scheduledTimeList: List.generate(7, (index) => DateTime.now().add(Duration(hours: 2))),
+          scheduledTimeList: retrieveDateTimeList(data),
           icon: Icons.access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);

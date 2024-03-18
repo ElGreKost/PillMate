@@ -55,7 +55,7 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   // Method to set exact time
-  void setScheduledTimeList(TimeOfDay time) {
+  void setScheduledTimeList(List<TimeOfDay?> times) {
     DateTime findNextDayOfWeek(int targetWeekday) {
       DateTime now = DateTime.now();
       int currentWeekday = now.weekday;
@@ -64,20 +64,29 @@ class MedicationProvider extends ChangeNotifier {
       if (currentWeekday <= targetWeekday) { // this week
         daysToAdd = targetWeekday - currentWeekday;
       } else { // next week
-        daysToAdd = (7 - currentWeekday) + targetWeekday;}
+        daysToAdd = (7 - currentWeekday) + targetWeekday;
+      }
 
       return DateTime(now.year, now.month, now.day + daysToAdd);
     }
 
     for (int iWeekday = 1; iWeekday <= 7; iWeekday++) {
       if (_selectedDays.contains(iWeekday)) {
-        _scheduledTimeList[iWeekday-1] = findNextDayOfWeek(iWeekday).add(Duration(hours:time.hour, minutes: time.minute));
+        TimeOfDay? time = times[iWeekday - 1];
+        if (time != null) {
+          DateTime nextDay = findNextDayOfWeek(iWeekday);
+          DateTime scheduledTime = DateTime(
+              nextDay.year, nextDay.month, nextDay.day, time.hour, time.minute);
+          _scheduledTimeList[iWeekday - 1] = scheduledTime;
+        }
       } else {
-        _scheduledTimeList[iWeekday-1] = null;
+        _scheduledTimeList[iWeekday - 1] = null;
       }
     }
     notifyListeners();
   }
+
+
 
   Future<void> addMedication() async {
     try {

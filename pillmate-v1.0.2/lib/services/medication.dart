@@ -25,7 +25,9 @@ class Medication {
       'name': name,
       'type': type,
       'betweenMeals': betweenMeals,
-      'exactTime': scheduledTimeList.toString(), // Convert DateTime to String
+      'scheduledTimeList': scheduledTimeList.map((dateTime) => dateTime?.millisecondsSinceEpoch).toList(),
     };
   }
+
+
 }

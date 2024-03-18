@@ -161,8 +161,15 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         value: Time(hour: _time.hour, minute: _time.minute),
         onChange: (Time newTime) {
           // print(newTime);
+          // Create the list of TimeOfDay instances
+          List<TimeOfDay?> newTimeList = List.generate(
+            7,
+                (index) => _days[index].isSelected ? TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: newTime.hour, minutes: newTime.minute))) : null,
+          );
+
+
           Provider.of<MedicationProvider>(context, listen: false)
-              .setScheduledTimeList(newTime);
+              .setScheduledTimeList(newTimeList);
           setState(() =>
               _time = TimeOfDay(hour: newTime.hour, minute: newTime.minute));
         },
