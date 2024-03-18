@@ -55,7 +55,7 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   // Method to set exact time
-  void setScheduledTimeList(List<TimeOfDay?> times) {
+  void setScheduledTimeList(List<DateTime?> times) {
     DateTime findNextDayOfWeek(int targetWeekday) {
       DateTime now = DateTime.now();
       int currentWeekday = now.weekday;
@@ -72,7 +72,7 @@ class MedicationProvider extends ChangeNotifier {
 
     for (int iWeekday = 1; iWeekday <= 7; iWeekday++) {
       if (_selectedDays.contains(iWeekday)) {
-        TimeOfDay? time = times[iWeekday - 1];
+        DateTime? time = times[iWeekday - 1];
         if (time != null) {
           DateTime nextDay = findNextDayOfWeek(iWeekday);
           DateTime scheduledTime = DateTime(

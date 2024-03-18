@@ -33,7 +33,12 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
     DayInWeek("Sun", dayKey: '7'),
   ];
 
-  List<String> mealTimes = ['Before Meal', 'During Meal', 'After Meal', 'Anytime'];
+  List<String> mealTimes = [
+    'Before Meal',
+    'During Meal',
+    'After Meal',
+    'Anytime'
+  ];
 
   int _mealTimeIndex = 3; // default for
 
@@ -69,13 +74,12 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
                     colors: [appTheme.grey900, appTheme.cyan900]),
               ),
               onSelect: (selectedDays) {
-
                 List<int> selectedDaysInt = [];
                 for (var string in selectedDays) {
                   selectedDaysInt.add(int.parse(string));
                 }
                 Provider.of<MedicationProvider>(context, listen: false)
-                      .setSelectedDays(selectedDaysInt);
+                    .setSelectedDays(selectedDaysInt);
               },
             ),
             SizedBox(height: 24.v),
@@ -125,16 +129,15 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
             SizedBox(height: 24.v),
             MedListTile(
               medication: Medication(
-                name: medicationProvider.selectedPillName ?? "Pill Name",
-                type: medicationProvider.selectedPillType ?? "Pill Type",
-                icon:
-                    medicationProvider.selectedPillIconData ?? Icons.medication,
-                // Default icon if null
-                // days: medicationProvider.selectedDays,
-                betweenMeals:
-                    medicationProvider.betweenMeals ?? "Meal Preference",
-                scheduledTimeList: medicationProvider.scheduledTimeList
-              ),
+                  name: medicationProvider.selectedPillName ?? "Pill Name",
+                  type: medicationProvider.selectedPillType ?? "Pill Type",
+                  icon: medicationProvider.selectedPillIconData ??
+                      Icons.medication,
+                  // Default icon if null
+                  // days: medicationProvider.selectedDays,
+                  betweenMeals:
+                      medicationProvider.betweenMeals ?? "Meal Preference",
+                  scheduledTimeList: medicationProvider.scheduledTimeList),
             ),
             SizedBox(height: 24.v),
             Center(
@@ -158,15 +161,19 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
             color: appTheme.grey500, fontWeight: FontWeight.bold, fontSize: 24),
         okText: 'Set',
         blurredBackground: true,
+        is24HrFormat: true,
         value: Time(hour: _time.hour, minute: _time.minute),
         onChange: (Time newTime) {
-          // print(newTime);
+          print(newTime);
           // Create the list of TimeOfDay instances
-          List<TimeOfDay?> newTimeList = List.generate(
-            7,
-                (index) => _days[index].isSelected ? TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: newTime.hour, minutes: newTime.minute))) : null,
-          );
-
+          var now = DateTime.now();
+          List<DateTime?> newTimeList = List.generate(
+              7,
+              (index) => _days[index].isSelected
+                  ? DateTime(now.year, now.month, now.day, newTime.hour,
+                      newTime.minute)
+                  : null);
+          print(newTimeList);
 
           Provider.of<MedicationProvider>(context, listen: false)
               .setScheduledTimeList(newTimeList);
@@ -198,7 +205,8 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
               ),
             ),
             textTheme: TextTheme(
-              titleMedium: TextStyle(color: appTheme.cyan900), // day number style
+              titleMedium: TextStyle(color: appTheme.cyan900),
+              // day number style
               labelLarge: TextStyle(color: appTheme.cyan500), // day name style
             ),
           ),
@@ -207,7 +215,6 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
       },
     );
   }
-
 
   Future<void> _onSavePressed() async {
     final medicationProvider =
