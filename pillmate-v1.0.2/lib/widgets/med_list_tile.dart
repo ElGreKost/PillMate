@@ -417,7 +417,8 @@ class _MedListTileState extends State<MedListTile> {
                   SizedBox(width: 16.h),
                   _buildIconButton(Icons.info, "Info", Colors.amber, () {
                     print('clicked info');
-                    searchMedication(widget.medication.name);
+                    _showMedicationInfoModal(context);
+                    // searchMedication(widget.medication.name);
                   }),
                   SizedBox(width: 16.h),
                   _buildIconButton(Icons.delete, "Delete", Colors.red, () {
