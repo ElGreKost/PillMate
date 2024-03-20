@@ -11,6 +11,7 @@ import '../services/medication.dart'; // Adjust the import paths as necessary.
 import 'package:flutter/foundation.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
   for (var time in times) {
@@ -20,6 +21,41 @@ TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
   }
   return null; // Return null if no non-null time is found
 }
+
+Future<void> searchMedication(String medName) async {
+  try {
+    // Reference to the medications collection
+    CollectionReference medications = FirebaseFirestore.instance.collection('medications');
+
+    print('Searching for medication: $medName');
+    // Reference to the document with the given medication name
+    DocumentSnapshot docSnapshot = await medications.doc(medName).get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Get the data from the document
+      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+      // Remove the 'brand_name' field from the data
+      data.remove('brand_name');
+
+      // Print the remaining data
+      print('Medication data for $medName:');
+      data.forEach((key, value) {
+        // Check if the value is not null before printing
+        if (!value.isEmpty) {
+          print('$key: $value');
+        }
+      });
+    } else {
+      print('Medication not found: $medName');
+    }
+  } catch (error) {
+    print('Error searching medication: $error');
+  }
+  print('Function execution complete');
+}
+
 
 IconData getIconForMedicationType(String type) {
   print('Medication type: $type');
@@ -379,8 +415,10 @@ class _MedListTileState extends State<MedListTile> {
                   _buildIconButton(LineIcons.medicalNotes, "Edit", Colors.blue,
                       () => setState(() => _isEditPressed = true)),
                   SizedBox(width: 16.h),
-                  _buildIconButton(Icons.info, "Info", Colors.amber,
-                      () => setState(() => _isInfoPressed = true)),
+                  _buildIconButton(Icons.info, "Info", Colors.amber, () {
+                    print('clicked info');
+                    searchMedication(widget.medication.name);
+                  }),
                   SizedBox(width: 16.h),
                   _buildIconButton(Icons.delete, "Delete", Colors.red, () {
                     print('clicked delete');
