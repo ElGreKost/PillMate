@@ -8,7 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> deleteMedicationWithName(String name) async {
   final Box medicationsBox = Hive.box('medications');
@@ -51,10 +51,14 @@ void main() async {
 
   await Hive.openBox('medications');
 
-  await deleteMedicationWithName('Aspirin');
+  await Firebase.initializeApp(options: FirebaseOptions(
+      apiKey: 'AIzaSyAhPiPIzLiVkXh9VJA1d-lJCgQE3pKg4eg',
+      appId: '1:666763914566:android:89b2cbe4c5eeb2d4b00947',
+      messagingSenderId: '666763914566',
+      projectId: 'pillmate-4d684'));
 
   await AwesomeNotifications().initialize(
-      // 'resource://drawable/ic_launcher',
+    // 'resource://drawable/ic_launcher',
       null, // to see pillmate icon
       [
         NotificationChannel(
