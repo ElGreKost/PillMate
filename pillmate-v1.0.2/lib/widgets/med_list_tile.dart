@@ -22,39 +22,53 @@ TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
   return null; // Return null if no non-null time is found
 }
 
-Future<void> searchMedication(String medName) async {
+Future<String> searchMedication(String medName) async {
   try {
     // Reference to the medications collection
-    CollectionReference medications = FirebaseFirestore.instance.collection('medications');
+    CollectionReference medications =
+    FirebaseFirestore.instance.collection('medications');
 
-    print('Searching for medication: $medName');
     // Reference to the document with the given medication name
     DocumentSnapshot docSnapshot = await medications.doc(medName).get();
 
     // Check if the document exists
     if (docSnapshot.exists) {
       // Get the data from the document
-      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data =
+      docSnapshot.data() as Map<String, dynamic>;
 
       // Remove the 'brand_name' field from the data
       data.remove('brand_name');
 
-      // Print the remaining data
-      print('Medication data for $medName:');
+      // Construct the medication data text
+      String medicationData = 'Medication data for $medName:\n\n';
       data.forEach((key, value) {
-        // Check if the value is not null before printing
-        if (!value.isEmpty) {
-          print('$key: $value');
+        // Check if the value is not null and not an empty list
+        if (!(value is List && value.isEmpty)) {
+          if (value is List) {
+            // Remove the first and last elements of the list if they are empty strings
+            if (value.first == '') value.removeAt(0);
+            if (value.last == '') value.removeLast();
+            // Format list values
+            String formattedValue = value.join('\n\n');
+
+            medicationData += '$key:\n$formattedValue\n\n';
+          }
         }
       });
+
+      // Return the formatted text
+      return medicationData;
     } else {
-      print('Medication not found: $medName');
+      return 'Medication not found: $medName';
     }
   } catch (error) {
-    print('Error searching medication: $error');
+    // Handle error and return error message
+    return 'Error searching medication: $error';
   }
-  print('Function execution complete');
 }
+
+
 
 
 IconData getIconForMedicationType(String type) {
@@ -417,6 +431,7 @@ class _MedListTileState extends State<MedListTile> {
                   SizedBox(width: 16.h),
                   _buildIconButton(Icons.info, "Info", Colors.amber, () {
                     print('clicked info');
+                    searchMedication(widget.medication.name);
                     _showMedicationInfoModal(context);
                     // searchMedication(widget.medication.name);
                   }),
@@ -570,55 +585,75 @@ class _MedListTileState extends State<MedListTile> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: appTheme.whiteA700,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.h),
-              topRight: Radius.circular(20.h),
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Detailed Medication Information",
-                  style: TextStyle(
-                    fontSize: 20.h,
-                    fontWeight: FontWeight.bold,
-                    color: appTheme.cyan500,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                // Example detailed information, you should populate it with real data.
-                Text(
-                  "This section can contain detailed information about the medication, such as dosage, intake instructions, possible side effects, and any other relevant details. The content here can be dynamically generated based on the medication data.",
-                  style: TextStyle(fontSize: 14.h, color: appTheme.grey900),
-                ),
-                SizedBox(height: 20.h),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    primary: appTheme.cyan500,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.h),
-                    ),
-                  ),
-                  child: Text(
-                    'Close',
-                    style: TextStyle(color: appTheme.whiteA700),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return _buildMedicationInfo(context); // Call an async function from within the builder
       },
     );
   }
+
+  FutureBuilder _buildMedicationInfo(BuildContext context) {
+    return FutureBuilder<String>(
+      future: searchMedication(widget.medication.name),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // While waiting for data, display a loading indicator
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          // Once data is available, display it in the bottom sheet
+          return Container(
+            decoration: BoxDecoration(
+              color: appTheme.whiteA700,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.h),
+                topRight: Radius.circular(20.h),
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16.h),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Detailed Medication Information",
+                      style: TextStyle(
+                        fontSize: 20.h,
+                        fontWeight: FontWeight.bold,
+                        color: appTheme.cyan500,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    // Display medication information received from the future
+                    Text(
+                      snapshot.data ?? 'No data available', // Handle null data
+                      style: TextStyle(fontSize: 14.h, color: appTheme.grey900),
+                    ),
+                    SizedBox(height: 20.h),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        primary: appTheme.cyan500,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.h),
+                        ),
+                      ),
+                      child: Text(
+                        'Close',
+                        style: TextStyle(color: appTheme.whiteA700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
 
 
   Widget _buildIconButton(
