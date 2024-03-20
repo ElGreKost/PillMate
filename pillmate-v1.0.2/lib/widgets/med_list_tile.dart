@@ -482,33 +482,105 @@ class _MedListTileState extends State<MedListTile> {
 
   Widget _buildInfoView() {
     return GestureDetector(
-      onLongPress: () => setState(() {
-        _isLongPressed = false;
-        _isEditPressed = false;
-        _isInfoPressed = false;
-      }),
+      onTap: () => _showMedicationInfoModal(context),
       child: Container(
         key: ValueKey('infoView'),
         padding: EdgeInsets.all(12.h),
-        decoration: AppDecoration.white,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Medication Information",
-                  style:
-                      TextStyle(fontSize: 18.h, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8.h),
-              // Display the medication info. This is a placeholder. You should populate it with real data.
-              Text("No information available for this medication.",
-                  style: TextStyle(fontSize: 14.v)),
-            ],
-          ),
+        decoration: BoxDecoration(
+          color: appTheme.grey500,
+          borderRadius: BorderRadius.circular(20.h),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    "Medication Information",
+                    style: TextStyle(
+                      fontSize: 18.h,
+                      fontWeight: FontWeight.bold,
+                      color: appTheme.cyan500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.close, size: 24.h, color: appTheme.grey500),
+                  onPressed: () => setState(() {
+                    _isInfoPressed = false;
+                  }),
+                )
+              ],
+            ),
+            Text(
+              "Tap for more details",
+              style: TextStyle(fontSize: 14.h, color: appTheme.grey500),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  void _showMedicationInfoModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: appTheme.whiteA700,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.h),
+              topRight: Radius.circular(20.h),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(16.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Detailed Medication Information",
+                  style: TextStyle(
+                    fontSize: 20.h,
+                    fontWeight: FontWeight.bold,
+                    color: appTheme.cyan500,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                // Example detailed information, you should populate it with real data.
+                Text(
+                  "This section can contain detailed information about the medication, such as dosage, intake instructions, possible side effects, and any other relevant details. The content here can be dynamically generated based on the medication data.",
+                  style: TextStyle(fontSize: 14.h, color: appTheme.grey900),
+                ),
+                SizedBox(height: 20.h),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    primary: appTheme.cyan500,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.h),
+                    ),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color: appTheme.whiteA700),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _buildIconButton(
       IconData icon, String tooltip, Color color, VoidCallback onPressed) {
