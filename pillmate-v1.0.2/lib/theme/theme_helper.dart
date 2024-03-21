@@ -43,6 +43,20 @@ class ThemeHelper {
       colorScheme: colorScheme,
       textTheme: TextThemes.textTheme(colorScheme),
       scaffoldBackgroundColor: appTheme.grey900,
+      // Customize dialog theme
+      dialogTheme: DialogTheme(
+        backgroundColor: appTheme.grey700, // Dialog background color
+        titleTextStyle: TextStyle(
+          color: appTheme.cyan500, // Title text color
+          fontSize: 20.fSize,
+          fontWeight: FontWeight.bold,
+        ),
+        contentTextStyle: TextStyle(
+          color: appTheme.whiteA700, // Content text color
+          fontSize: 16.fSize,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)), // Dialog shape
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               backgroundColor: appTheme.cyan500,

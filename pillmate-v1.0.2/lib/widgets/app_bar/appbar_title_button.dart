@@ -1,6 +1,7 @@
 import 'package:pillmate/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:pillmate/core/app_export.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class AppbarTitleButton extends StatelessWidget {
@@ -30,7 +31,11 @@ class AppbarTitleButton extends StatelessWidget {
             text: "BOOK  APPOINTMENT",
             buttonStyle: CustomButtonStyles.fillCyan,
             buttonTextStyle: theme.textTheme.labelSmall!,
-        onPressed: () => showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime(2026)),
+        onPressed: () async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isFirstVisit', true);
+          print(prefs.getBool('isFirstVisit'));
+        },
         ),
       ),
     );

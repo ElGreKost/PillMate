@@ -3,13 +3,92 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/medication.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/med_list_tile.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
-class HomescreenPage extends StatelessWidget {
+class HomescreenPage extends StatefulWidget {
+  // made stateful so that we can check first visit
   const HomescreenPage({Key? key}) : super(key: key);
+
+  @override
+  State<HomescreenPage> createState() => _HomescreenPageState();
+}
+
+class _HomescreenPageState extends State<HomescreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstVisit();
+  }
+
+  Future<void> _checkFirstVisit() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstVisit = prefs.getBool('isFirstVisit') ?? true;
+
+    if (isFirstVisit) {
+      _showWelcomeDialog();
+      await prefs.setBool('isFirstVisit', false);
+    }
+  }
+
+  void _showWelcomeDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Welcome to PillMate!'),
+        content: Text('Would you like to personalize your experience?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              _showPersonalizationForm(); // Proceed to the form
+            },
+            child: Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPersonalizationForm() {
+    // Navigate to a new screen or show a modal to collect more details
+    // For simplicity, let's show another dialog for now
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Personalize Your Experience'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Your Name'),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Loved One\'s Name'),
+              ),
+              TextField(
+                decoration:
+                    InputDecoration(labelText: 'Loved One\'s Phone Number'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +98,8 @@ class HomescreenPage extends StatelessWidget {
           leadingWidth: 49.h,
           backgroundColor: appTheme.grey900,
           leading: IconButton(
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.settingsScreen),
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRoutes.settingsScreen),
             icon: Icon(Icons.settings, color: appTheme.cyan500),
           ),
           centerTitle: true,
@@ -29,16 +109,19 @@ class HomescreenPage extends StatelessWidget {
               onPressed: () => showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.transparent,
-                builder: (BuildContext context) => SizedBox(height: 340.h, child: AudioBottomSheet()),
+                builder: (BuildContext context) =>
+                    SizedBox(height: 340.h, child: AudioBottomSheet()),
               ),
-              icon: Icon(Icons.campaign_outlined, color: appTheme.cyan500, size: 35.h),
+              icon: Icon(Icons.campaign_outlined,
+                  color: appTheme.cyan500, size: 35.h),
             )
           ],
         ),
         body: _buildMedList(context),
         // bottomNavigationBar: GNavWidget(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.selectPillName),
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRoutes.selectPillName),
           child: Icon(Icons.add, color: Colors.white, size: 35.v),
           backgroundColor: appTheme.cyan500,
         ),
@@ -55,8 +138,8 @@ class HomescreenPage extends StatelessWidget {
         medications.forEach((medication) {
           print(medication.name);
           print('Scheduled timelist is: ${medication.scheduledTimeList}');
-        }
-        );print('finished with meds');
+        });
+        print('finished with meds');
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
@@ -66,8 +149,11 @@ class HomescreenPage extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(text: "Good Morning \n", style: CustomTextStyles.titleLargeffffffff),
-                    TextSpan(text: "Gracy", style: theme.textTheme.displaySmall),
+                    TextSpan(
+                        text: "Good Morning \n",
+                        style: CustomTextStyles.titleLargeffffffff),
+                    TextSpan(
+                        text: "Gracy", style: theme.textTheme.displaySmall),
                   ],
                 ),
                 textAlign: TextAlign.left,
@@ -84,7 +170,8 @@ class HomescreenPage extends StatelessWidget {
                   shrinkWrap: true,
                   separatorBuilder: (context, index) => SizedBox(height: 40.v),
                   itemCount: medications.length,
-                  itemBuilder: (context, index) => MedListTile(medication: medications[index]),
+                  itemBuilder: (context, index) =>
+                      MedListTile(medication: medications[index]),
                 ),
               ),
               SizedBox(height: 20.v),
@@ -96,16 +183,17 @@ class HomescreenPage extends StatelessWidget {
   }
 
   // Define a function to create a customized notification
-  void createPillReminderNotification(int notificationId, String medicationName) {
+  void createPillReminderNotification(
+      int notificationId, String medicationName) {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: notificationId,
-        channelKey: 'basic_channel', // Make sure this channel is defined in your AwesomeNotifications initialization
+        channelKey: 'basic_channel',
+        // Make sure this channel is defined in your AwesomeNotifications initialization
         title: '$medicationName Time',
         body: 'Time to take your $medicationName.',
         actionType: ActionType.Default,
       ),
-
       actionButtons: [
         NotificationActionButton(
           key: 'MARK_TAKEN',
@@ -118,18 +206,16 @@ class HomescreenPage extends StatelessWidget {
     );
   }
 
-
   List<Medication> _getAllMedications(Box box) {
     List<Medication> allMedications = [];
 
     for (var key in box.keys) {
-
       dynamic data = box.get(key);
 
       if (data is Map<dynamic, dynamic>) {
-
         List<DateTime?> retrieveDateTimeList(Map<dynamic, dynamic> data) {
-          final List<dynamic>? timestampList = data['scheduledTimes'] as List<dynamic>?;
+          final List<dynamic>? timestampList =
+              data['scheduledTimes'] as List<dynamic>?;
 
           if (timestampList == null) return [];
 
@@ -142,9 +228,6 @@ class HomescreenPage extends StatelessWidget {
           }).toList();
         }
 
-
-
-
         print('data printed is: ${data['name']}');
         Medication medication = Medication(
           name: data['name'] ?? '',
@@ -152,7 +235,8 @@ class HomescreenPage extends StatelessWidget {
           betweenMeals: data['betweenMeals'] ?? '',
           // scheduledTimeList: data['scheduleTimes'] != null ? DateTime.parse(data['exactTime']) : DateTime.now(),
           scheduledTimeList: retrieveDateTimeList(data),
-          icon: Icons.access_alarm, // You might need to set this appropriately based on your data
+          icon: Icons
+              .access_alarm, // You might need to set this appropriately based on your data
         );
         allMedications.add(medication);
         print('finished');

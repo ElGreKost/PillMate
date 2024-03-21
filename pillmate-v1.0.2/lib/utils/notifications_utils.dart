@@ -35,10 +35,10 @@ class NotificationUtils {
       // that it has the ! (bang operator), the scheduledTime can be used for
       // scheduling the notificationTime values
       print(scheduledTime!); // todo never delete this print
-      scheduleNotification(scheduledTime.subtract(Duration(minutes: 1)),
+      scheduleNotification(scheduledTime.subtract(Duration(minutes: 10)),
           'Take your ${med.type} in 10 minutes.');
       scheduleNotification(scheduledTime, 'It\'s time for your medication');
-      scheduleNotification(scheduledTime.add(Duration(minutes: 1)),
+      scheduleNotification(scheduledTime.add(Duration(minutes: 10)),
           'Your ${med.type} should be taken before 10 minutes.');
     }
     print(med.notificationIdList);
