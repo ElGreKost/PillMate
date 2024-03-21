@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pillmate/theme/theme_helper.dart';
 
 TimeOfDay? findFirstNonNullTime(List<TimeOfDay?> times) {
   for (var time in times) {
@@ -64,7 +65,8 @@ Future<String> searchMedication(String medName) async {
     }
   } catch (error) {
     // Handle error and return error message
-    return 'Error searching medication: $error';
+    return 'Internet connection could not be established.\nPlease verify your network settings and try again.\n'
+        'If the problem persists, please provide further details at pillmateSupport@gmail.com.';
   }
 }
 
@@ -597,7 +599,7 @@ class _MedListTileState extends State<MedListTile> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // While waiting for data, display a loading indicator
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.cyan),
           );
         } else {
           // Once data is available, display it in the bottom sheet
