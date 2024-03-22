@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'backend/notification_controller.dart';
 import 'core/app_export.dart';
 import 'package:provider/provider.dart';
@@ -109,25 +108,11 @@ class _MyAppState extends State<MyApp> {
         onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
 
     super.initState();
-    _checkFirstVisit();
-  }
-
-  Future<void> _checkFirstVisit() async {
-    final prefs = await SharedPreferences.getInstance();
-    widget.isFirstVisit = prefs.getBool('isFirstVisit') ?? true;
-
-    if (widget.isFirstVisit) {
-      await prefs.setBool('isFirstVisit', false);
-      widget.isFirstVisit = false;
-    }
   }
 
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (BuildContext context) => AppState()),
@@ -140,7 +125,7 @@ class _MyAppState extends State<MyApp> {
             theme: theme,
             title: 'pillmate',
             debugShowCheckedModeBanner: false,
-            initialRoute: widget.isFirstVisit ? AppRoutes.onboardingScreen : AppRoutes.homescreenPage,
+            initialRoute: AppRoutes.initialScreen,
             routes: AppRoutes.routes,
           );
         },
