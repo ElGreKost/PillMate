@@ -12,6 +12,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pillmate/services/personal_data.dart';
 
+Future<void> deleteAllUserData() async {
+  try {
+    final Box userDataBox = await Hive.openBox('userdata');
+    await userDataBox.clear();
+    print('All data deleted from the userdata box.');
+  } catch (e) {
+    print('Error deleting data from the userdata box: $e');
+  }
+}
+
+
 Future<void> deleteMedicationWithName(String name) async {
   final Box medicationsBox = Hive.box('medications');
 
