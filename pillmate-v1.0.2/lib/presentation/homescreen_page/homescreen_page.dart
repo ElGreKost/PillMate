@@ -25,10 +25,7 @@ Future<String?> getNameFromUserData() async {
   }
 }
 
-
-
 class HomescreenPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,63 +66,6 @@ class HomescreenPage extends StatelessWidget {
     );
   }
 
-  // void _showWelcomeDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text('Welcome to PillMate!'),
-  //       content: Text('Would you like to personalize your experience?'),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(),
-  //           child: Text('No'),
-  //         ),
-  //         TextButton(
-  //           onPressed: () {
-  //             Navigator.of(context).pop(); // Close the dialog
-  //             _showPersonalizationForm(); // Proceed to the form
-  //           },
-  //           child: Text('Yes'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
-  // void _showPersonalizationForm() {
-  //   // Navigate to a new screen or show a modal to collect more details
-  //   // For simplicity, let's show another dialog for now
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text('Personalize Your Experience'),
-  //       content: SingleChildScrollView(
-  //         child: ListBody(
-  //           children: [
-  //             TextField(
-  //               decoration: InputDecoration(labelText: 'Your Name'),
-  //             ),
-  //             TextField(
-  //               decoration: InputDecoration(labelText: 'Loved One\'s Name'),
-  //             ),
-  //             TextField(
-  //               decoration:
-  //               InputDecoration(labelText: 'Loved One\'s Phone Number'),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(),
-  //           child: Text('Submit'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-
   Widget _buildMedList(BuildContext context) {
     return FutureBuilder<String?>(
       future: getNameFromUserData(),
@@ -157,7 +97,9 @@ class HomescreenPage extends StatelessWidget {
                             text: "Good Morning, \n",
                             style: CustomTextStyles.titleLargeffffffff,
                           ),
-                          TextSpan(text: userName, style: theme.textTheme.displayMedium)
+                          TextSpan(
+                              text: userName,
+                              style: theme.textTheme.displayMedium)
                         ],
                       ),
                       textAlign: TextAlign.left,
@@ -167,10 +109,11 @@ class HomescreenPage extends StatelessWidget {
                       child: ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        separatorBuilder: (context, index) => SizedBox(height: 40.v),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 40.v),
                         itemCount: medications.length,
                         itemBuilder: (context, index) =>
-                            MedListTile(medication: medications[index]),
+                            MedListTile (medication: medications[index]),
                       ),
                     ),
                     SizedBox(height: 20.v),
@@ -183,7 +126,6 @@ class HomescreenPage extends StatelessWidget {
       },
     );
   }
-
 
   // Define a function to create a customized notification
   void createPillReminderNotification(

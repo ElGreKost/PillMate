@@ -94,6 +94,20 @@ void main() async {
     }
   });
 
+  // AwesomeNotifications().setListeners(
+  //   onActionReceivedMethod: (ReceivedAction action) {
+  //     // Handle action press here
+  //     print('Action received with id: ${action.id}');
+  //
+  //     if (action.actionKey == 'MARK_READ') {
+  //       // Perform action specific tasks (e.g., update notification content)
+  //     } else if (action.actionKey == 'DELETE') {
+  //       // Perform action specific tasks (e.g., delete notification)
+  //     }
+  //   },
+  //   // ... other listeners (optional)
+  // );
+
   ThemeHelper().changeTheme('primary');
   runApp(MyApp());
 }

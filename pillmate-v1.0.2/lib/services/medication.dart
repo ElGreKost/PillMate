@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Medication {
   // todo - Cons: Upon restart this will be set back to 0
-  static int _idCounter = 1;
+  static int _globalNotificationIdCounter = 1;
 
-  final List<int> notificationIdList = [_idCounter];
+  final List<int> notificationIdList = [_globalNotificationIdCounter];
   final String name;
   final String type;
   final String betweenMeals;
-  final List<DateTime?> scheduledTimeList;
+  final List<DateTime?> scheduledTimeList;  // todo make it a Map<DateTime?, List<int>>
   final IconData icon;
 
   Medication({
@@ -18,7 +19,13 @@ class Medication {
     required this.betweenMeals,
     required this.scheduledTimeList,
   }) {
-    _idCounter += 100;
+    _globalNotificationIdCounter += 100;
+  }
+
+  Future<void> saveAndIncrementGlobalNotificationIdCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('medicationIdCounter', Medication._globalNotificationIdCounter);
+    _globalNotificationIdCounter++;
   }
 
   void appendNotificationId() {

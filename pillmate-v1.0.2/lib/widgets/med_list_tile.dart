@@ -251,7 +251,7 @@ class _MedListTileState extends State<MedListTile> {
     DateTime? nextScheduledTime = _findFirstScheduledTimeWithinNext12Hours();
 
     if (nextScheduledTime == null) {
-      return SizedBox(); // If no scheduled time is found within the next 12 hours, return an empty widget
+      return Visibility(visible: false,child: SizedBox()); // If no scheduled time is found within the next 12 hours, return an empty widget
     } else {
       // Calculate the fill ratio based on the next scheduled time
       double fillRatio = _calculateFillRatio(nextScheduledTime);
@@ -339,9 +339,16 @@ class _MedListTileState extends State<MedListTile> {
                 children: [
                   _buildIconButton(Icons.check_circle, "Take", Colors.green,
                       () {
-                    Provider.of<AppState>(context, listen: false)
-                        .deleteMedication(widget.medication);
-                  }),
+                        NotificationUtils.cancelTodayMedicationNotifications(widget.medication);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Medication marked as taken!', style: TextStyle(color: appTheme.whiteA700)),
+                            backgroundColor: appTheme.teal500,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          ),
+                        );
+                      }),
                   SizedBox(width: 16.h),
                   _buildIconButton(LineIcons.medicalNotes, "Edit", Colors.blue,
                       () => setState(() => _isEditPressed = true)),
@@ -357,7 +364,7 @@ class _MedListTileState extends State<MedListTile> {
                     print('clicked delete');
                     print(widget.medication.runtimeType);
                     deleteMedicationFromBox(widget.medication.toMap());
-                    NotificationUtils.cancelMedicationNotifications(widget.medication);
+                    NotificationUtils.cancelAllMedicationNotifications(widget.medication);
                   }),
                 ]),
           ],

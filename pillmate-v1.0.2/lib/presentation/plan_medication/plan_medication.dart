@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pillmate/core/utils/size_utils.dart';
 import 'package:pillmate/services/medication.dart';
 import 'package:pillmate/widgets/custom_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../backend/app_state.dart';
 import '../../services/medication_data_provider.dart';
 import 'package:provider/provider.dart';
@@ -234,12 +235,12 @@ class _PlanMedicationScreenState extends State<PlanMedicationScreen> {
         icon: medicationProvider.selectedPillIconData!,
         betweenMeals: medicationProvider.betweenMeals!,
         scheduledTimeList: medicationProvider.scheduledTimeList);
-    Provider.of<AppState>(context, listen: false).addMedication(newMedication);
-    
+
     // Create Notifications for Medication
     NotificationUtils.scheduleMedicationNotifications(newMedication);
+    newMedication.saveAndIncrementGlobalNotificationIdCounter();
 
-    await medicationProvider.addMedication(); // Add medication to Firestore
+    await medicationProvider.addMedication(); // Add medication to Hive
     Navigator.pushNamed(context, AppRoutes.homescreenPage);
   }
 }

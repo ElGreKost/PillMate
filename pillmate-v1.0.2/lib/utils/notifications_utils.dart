@@ -44,9 +44,20 @@ class NotificationUtils {
     print(med.notificationIdList);
   }
 
-  static void cancelMedicationNotifications(Medication med) {
+  static void cancelAllMedicationNotifications(Medication med) {
     med.notificationIdList.forEach(
         (notificationId) => AwesomeNotifications().cancel(notificationId));
+  }
+
+  static void cancelTodayMedicationNotifications(Medication med) {
+    int todayIdx = DateTime.now().weekday;
+    int medActiveDaysNb = med.scheduledTimeList.where((time)=> time != null).length;
+    for (int iDayIdx = 0; iDayIdx < medActiveDaysNb; iDayIdx++) {
+      if (iDayIdx == todayIdx) {
+        List<int> todayNotificationIdxList = [3* iDayIdx, 3 * iDayIdx + 1, 3 * iDayIdx + 2];
+        todayNotificationIdxList.forEach((idx) => AwesomeNotifications().cancel(med.notificationIdList[idx]));
+      }
+    }
   }
 }
 // todo change launch therapy

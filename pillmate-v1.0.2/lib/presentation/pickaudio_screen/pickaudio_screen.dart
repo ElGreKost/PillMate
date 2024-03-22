@@ -21,7 +21,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(child: Text("AUDIO", style: theme.textTheme.headlineLarge)),
+          Center(child: Text("AUDIO", style: theme.textTheme.displayMedium)),
           SizedBox(height: 36.v),
           // Transform.scale to make the switch larger
           Transform.scale(
@@ -39,7 +39,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
             ),
           ),
           SizedBox(height: 37.v),
-          Center(child: Text(isOn ? "Sound On" : "Sound Off", style: theme.textTheme.headlineLarge)),
+          Center(child: Text(isOn ? "Sound On" : "Sound Off", style: theme.textTheme.titleMedium)),
           SizedBox(height: 37.v),
         ],
       ),

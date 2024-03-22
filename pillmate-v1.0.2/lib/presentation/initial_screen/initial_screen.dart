@@ -13,6 +13,7 @@ class _InitialScreenState extends State<InitialScreen> {
   void initState() {
     super.initState();
     _checkFirstVisitAndNavigate();
+
   }
 
   Future<void> _checkFirstVisitAndNavigate() async {
