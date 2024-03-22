@@ -154,7 +154,7 @@ class HomescreenPage extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Good Morning \n",
+                            text: "Good Morning, \n",
                             style: CustomTextStyles.titleLargeffffffff,
                           ),
                           TextSpan(text: userName, style: theme.textTheme.displayMedium)

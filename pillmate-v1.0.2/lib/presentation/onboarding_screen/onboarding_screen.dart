@@ -45,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _addMessage(
         TextBubble(
             message: "Together we are going to take care of your health. To do this, help me set up your unique profile by answering 3 questions.\n"
-                "Please given simple, one-word answers.",
+                "Please give simple, one-word answers.",
             isPillMate: true),
         true);
     _askForName();
@@ -90,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _addMessage(
       TextBubble(
           message:
-              "Who is a loved one we can contact in case you forget your medication?",
+              "What is the name of a loved one we can contact in case you forget your medication?",
           isPillMate: true),
       true,
     );
@@ -121,7 +121,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _goToMainApplication() {
     _addMessage(
       TextBubble(
-          message: "All set! Now, let's head over to the main application.",
+          message: "All set! Now, let's head over to the main application.\nIf you have made a mistake, don't worry!\nYou can always change this information in the app settings.",
           isPillMate: true),
       true,
     );

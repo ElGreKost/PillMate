@@ -34,28 +34,33 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addData() async{
-
+  Future<void> addData() async {
     try {
       final Box dataBox = await Hive.openBox('userdata');
-      Map <String, dynamic> data = {
-        'name': _name,
-        'lovedName': _lovedName,
-        'phoneNumber': _phoneNumber,
-      };
 
-      print('now adding:');
-      print('name: $_name');
-      print('loved name: $_lovedName');
-      print('phone: $_phoneNumber');
-
-      await dataBox.add(data);
-
-      print('Data added successfully');
-    }
-    catch(e) {
-      print('Error adding data to Hive: $e');
+      // Check if data exists in the box
+      if (dataBox.isNotEmpty) {
+        // Update existing data
+        dataBox.put(0, {
+          'name': _name,
+          'lovedName': _lovedName,
+          'phoneNumber': _phoneNumber,
+        });
+        print('Data updated successfully');
+      } else {
+        // Add new data
+        Map<String, dynamic> data = {
+          'name': _name,
+          'lovedName': _lovedName,
+          'phoneNumber': _phoneNumber,
+        };
+        await dataBox.add(data);
+        print('Data added successfully');
+      }
+    } catch (e) {
+      print('Error adding/updating data to Hive: $e');
     }
   }
+
 
 }
