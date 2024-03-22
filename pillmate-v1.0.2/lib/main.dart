@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pillmate/services/personal_data.dart';
 
 Future<void> deleteMedicationWithName(String name) async {
   final Box medicationsBox = Hive.box('medications');
@@ -51,6 +52,7 @@ void main() async {
   await Hive.initFlutter(hiveStorageDirectory);
 
   await Hive.openBox('medications');
+  await Hive.openBox('userdata');
 
   await Firebase.initializeApp(options: FirebaseOptions(
       apiKey: 'AIzaSyAhPiPIzLiVkXh9VJA1d-lJCgQE3pKg4eg',
@@ -130,6 +132,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (BuildContext context) => AppState()),
         ChangeNotifierProvider(create: (BuildContext context) => MedicationProvider()),
+        ChangeNotifierProvider(create: (BuildContext context) => UserDataProvider())
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {

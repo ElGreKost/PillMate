@@ -7,6 +7,26 @@ import '../../services/medication.dart';
 import '../../widgets/med_list_tile.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
+Future<String?> getNameFromUserData() async {
+  try {
+    final Box userDataBox = await Hive.openBox('userdata');
+    Map<dynamic, dynamic>? userData = userDataBox.values.first;
+
+    if (userData != null) {
+      String? name = userData['name'];
+      return name;
+    } else {
+      print('No data available in the userdata box.');
+      return null;
+    }
+  } catch (e) {
+    print('Error retrieving name from userdata box: $e');
+    return null;
+  }
+}
+
+
+
 class HomescreenPage extends StatelessWidget {
 
   @override
@@ -107,52 +127,63 @@ class HomescreenPage extends StatelessWidget {
 
 
   Widget _buildMedList(BuildContext context) {
-    return ValueListenableBuilder<Box>(
-      valueListenable: Hive.box('medications').listenable(),
-      builder: (context, box, _) {
-        List<Medication> medications = _getAllMedications(box);
-        print('All medications:');
-        medications.forEach((medication) {
-          print(medication.name);
-          print('Scheduled timelist is: ${medication.scheduledTimeList}');
-        });
-        print('finished with meds');
+    return FutureBuilder<String?>(
+      future: getNameFromUserData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Return a loading indicator or placeholder widget while waiting for the result
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // Return an error message widget if an error occurs
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // Retrieve the user name from the snapshot data
+          String userName = snapshot.data ?? 'User';
+          // Continue building the UI with the retrieved user name
+          return ValueListenableBuilder<Box>(
+            valueListenable: Hive.box('medications').listenable(),
+            builder: (context, box, _) {
+              List<Medication> medications = _getAllMedications(box);
 
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 4.v),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextSpan(
-                        text: "Good Morning \n",
-                        style: CustomTextStyles.titleLargeffffffff),
-                    TextSpan(
-                        text: "Gracy", style: theme.textTheme.displayMedium),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Good Morning \n",
+                            style: CustomTextStyles.titleLargeffffffff,
+                          ),
+                          TextSpan(text: userName, style: theme.textTheme.displayMedium)
+                        ],
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 8),
+                    Expanded(
+                      child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) => SizedBox(height: 40.v),
+                        itemCount: medications.length,
+                        itemBuilder: (context, index) =>
+                            MedListTile(medication: medications[index]),
+                      ),
+                    ),
+                    SizedBox(height: 20.v),
                   ],
                 ),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(height: 8),
-              Expanded(
-                child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => SizedBox(height: 40.v),
-                  itemCount: medications.length,
-                  itemBuilder: (context, index) =>
-                      MedListTile(medication: medications[index]),
-                ),
-              ),
-              SizedBox(height: 20.v),
-            ],
-          ),
-        );
+              );
+            },
+          );
+        }
       },
     );
   }
+
 
   // Define a function to create a customized notification
   void createPillReminderNotification(

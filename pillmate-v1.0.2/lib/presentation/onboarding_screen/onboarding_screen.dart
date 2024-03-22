@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pillmate/services/personal_data.dart';
+import 'package:provider/provider.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -14,6 +16,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final TextEditingController _lovedOneNameController = TextEditingController();
   final TextEditingController _lovedOnePhoneController =
       TextEditingController();
+
+
 
   @override
   void dispose() {
@@ -35,12 +39,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _addMessage(
         TextBubble(
             message:
-                "Hello and welcome to PillMate! I'm here to make sure you never forget your medication.",
+                "Hello and welcome to PillMate! I'm here to make sure you don't forget your medication.",
             isPillMate: true),
         true);
     _addMessage(
         TextBubble(
-            message: "Together we are going to take care of your health.",
+            message: "Together we are going to take care of your health. To do this, help me set up your unique profile by answering 3 questions.\n"
+                "Please given simple, one-word answers.",
             isPillMate: true),
         true);
     _askForName();
@@ -74,7 +79,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       true,
     );
     _addEditableMessage(_nameController, (value) {
-      _handleUserInput(value, "My name is ", _askForLovedOneName);
+      if(RegExp(r'^\S+$').hasMatch(value)) {
+        Provider.of<UserDataProvider>(context, listen:false).updateName(value);
+        _handleUserInput(value, "My name is ", _askForLovedOneName);
+      }
     });
   }
 
@@ -87,19 +95,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       true,
     );
     _addEditableMessage(_lovedOneNameController, (value) {
-      _handleUserInput(value, "My loved one's name is ", _askForLovedOnePhone);
+      if(RegExp(r'^\S+$').hasMatch(value)) {
+        Provider.of<UserDataProvider>(context, listen:false).updateLovedName(value);
+        _handleUserInput(value, "My loved one's name is ", _askForLovedOnePhone);
+      }
     });
   }
 
-  void _askForLovedOnePhone() {
+  void _askForLovedOnePhone () async  {
     _addMessage(
       TextBubble(message: "What's their phone number?", isPillMate: true),
       true,
     );
-    _addEditableMessage(_lovedOnePhoneController, (value) {
-      _handleUserInput(value, "Their phone number is ", _goToMainApplication);
+    _addEditableMessage(_lovedOnePhoneController, (value) async {
+      if(RegExp(r'^\S+$').hasMatch(value)) {
+        final userDataProvider = Provider.of<UserDataProvider>(context, listen:false);
+        userDataProvider.updatePhoneNumber(value);
+        await userDataProvider.addData();
+        _handleUserInput(value, "Their phone number is ", _goToMainApplication);
+      }
     });
   }
+
 
   void _goToMainApplication() {
     _addMessage(
@@ -219,7 +236,7 @@ class TextBubble extends StatelessWidget {
               controller: textController,
               onSubmitted: onSubmitted,
               decoration: InputDecoration.collapsed(
-                hintText: "Type your message...",
+                hintText: "Type your one-word answer...",
                 hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
               ),
               style: TextStyle(color: appTheme.teal100),
