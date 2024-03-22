@@ -3,92 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pillmate/core/app_export.dart';
 import 'package:pillmate/widgets/app_bar/appbar_title_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/medication.dart';
-import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/med_list_tile.dart';
 import '../pickaudio_screen/pickaudio_screen.dart';
 
-class HomescreenPage extends StatefulWidget {
-  // made stateful so that we can check first visit
-  const HomescreenPage({Key? key}) : super(key: key);
-
-  @override
-  State<HomescreenPage> createState() => _HomescreenPageState();
-}
-
-class _HomescreenPageState extends State<HomescreenPage> {
-  @override
-  void initState() {
-    super.initState();
-    _checkFirstVisit();
-  }
-
-  Future<void> _checkFirstVisit() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isFirstVisit = prefs.getBool('isFirstVisit') ?? true;
-
-    if (isFirstVisit) {
-      _showWelcomeDialog();
-      await prefs.setBool('isFirstVisit', false);
-    }
-  }
-
-  void _showWelcomeDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Welcome to PillMate!'),
-        content: Text('Would you like to personalize your experience?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('No'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-              _showPersonalizationForm(); // Proceed to the form
-            },
-            child: Text('Yes'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showPersonalizationForm() {
-    // Navigate to a new screen or show a modal to collect more details
-    // For simplicity, let's show another dialog for now
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Personalize Your Experience'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: [
-              TextField(
-                decoration: InputDecoration(labelText: 'Your Name'),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: 'Loved One\'s Name'),
-              ),
-              TextField(
-                decoration:
-                    InputDecoration(labelText: 'Loved One\'s Phone Number'),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Submit'),
-          ),
-        ],
-      ),
-    );
-  }
+class HomescreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +16,7 @@ class _HomescreenPageState extends State<HomescreenPage> {
         appBar: AppBar(
           leadingWidth: 49.h,
           backgroundColor: appTheme.grey900,
+          foregroundColor: appTheme.grey900,
           leading: IconButton(
             onPressed: () =>
                 Navigator.pushNamed(context, AppRoutes.settingsScreen),
@@ -129,6 +49,63 @@ class _HomescreenPageState extends State<HomescreenPage> {
     );
   }
 
+  // void _showWelcomeDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text('Welcome to PillMate!'),
+  //       content: Text('Would you like to personalize your experience?'),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.of(context).pop(),
+  //           child: Text('No'),
+  //         ),
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop(); // Close the dialog
+  //             _showPersonalizationForm(); // Proceed to the form
+  //           },
+  //           child: Text('Yes'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
+  // void _showPersonalizationForm() {
+  //   // Navigate to a new screen or show a modal to collect more details
+  //   // For simplicity, let's show another dialog for now
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text('Personalize Your Experience'),
+  //       content: SingleChildScrollView(
+  //         child: ListBody(
+  //           children: [
+  //             TextField(
+  //               decoration: InputDecoration(labelText: 'Your Name'),
+  //             ),
+  //             TextField(
+  //               decoration: InputDecoration(labelText: 'Loved One\'s Name'),
+  //             ),
+  //             TextField(
+  //               decoration:
+  //               InputDecoration(labelText: 'Loved One\'s Phone Number'),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.of(context).pop(),
+  //           child: Text('Submit'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+
   Widget _buildMedList(BuildContext context) {
     return ValueListenableBuilder<Box>(
       valueListenable: Hive.box('medications').listenable(),
@@ -153,16 +130,11 @@ class _HomescreenPageState extends State<HomescreenPage> {
                         text: "Good Morning \n",
                         style: CustomTextStyles.titleLargeffffffff),
                     TextSpan(
-                        text: "Gracy", style: theme.textTheme.displaySmall),
+                        text: "Gracy", style: theme.textTheme.displayMedium),
                   ],
                 ),
                 textAlign: TextAlign.left,
               ),
-              CustomElevatedButton(
-                text: 'Notification',
-                onPressed: () => createPillReminderNotification(10, 'DepoNaki'),
-              ),
-              SizedBox(height: 8),
               SizedBox(height: 8),
               Expanded(
                 child: ListView.separated(

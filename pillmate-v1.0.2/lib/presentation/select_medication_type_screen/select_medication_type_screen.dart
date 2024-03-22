@@ -87,7 +87,7 @@ class _SelectMedicationTypeScreenState extends State<SelectMedicationTypeScreen>
                                   iTypeData['type'],
                                   style: TextStyle(
                                     color: isSelected ? appTheme.teal100 : appTheme.grey100,
-                                    fontSize: theme.textTheme.displayMedium?.fontSize,
+                                    fontSize: theme.textTheme.bodyLarge?.fontSize,
                                   ),
                                 ),
                               ],
@@ -113,7 +113,7 @@ class _SelectMedicationTypeScreenState extends State<SelectMedicationTypeScreen>
                     Navigator.pushNamed(context, AppRoutes.modernSelectDay);
                   },
                   text: 'Next',
-                  width: 100.h,
+                  width: 110.h,
                 ),
               ),
             ],

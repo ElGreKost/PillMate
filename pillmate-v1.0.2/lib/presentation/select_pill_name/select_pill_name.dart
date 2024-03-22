@@ -124,7 +124,7 @@ class _SelectPillNameState extends State<SelectPillName> {
                 onPressed: () => Navigator.pushNamed(
                     context, AppRoutes.selectMedicationTypeScreen),
                 text: 'Next',
-                width: 100.h,
+                width: 110.h,
               ),
             ),
           ]),

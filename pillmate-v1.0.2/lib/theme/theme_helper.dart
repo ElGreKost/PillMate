@@ -6,10 +6,14 @@ String _appTheme = "primary";
 /// Helper class for managing themes and colors.
 class ThemeHelper {
   // A map of custom color themes supported by the app
-  Map<String, PrimaryColors> _supportedCustomColor = {'primary': PrimaryColors()};
+  Map<String, PrimaryColors> _supportedCustomColor = {
+    'primary': PrimaryColors()
+  };
 
   // A map of color schemes supported by the app
-  Map<String, ColorScheme> _supportedColorScheme = {'primary': ColorSchemes.primaryColorScheme};
+  Map<String, ColorScheme> _supportedColorScheme = {
+    'primary': ColorSchemes.primaryColorScheme
+  };
 
   /// Changes the app theme to [_newTheme].
   void changeTheme(String _newTheme) {
@@ -37,7 +41,8 @@ class ThemeHelper {
     }
     //return theme from map
 
-    var colorScheme = _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
+    var colorScheme =
+        _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
     return ThemeData(
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
@@ -55,14 +60,29 @@ class ThemeHelper {
           color: appTheme.whiteA700, // Content text color
           fontSize: 16.fSize,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)), // Dialog shape
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0)), // Dialog shape
       ),
+      // Customize ElevatedButtonThemeData
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: appTheme.cyan500,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.h)),
-              visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-              padding: EdgeInsets.zero)),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return appTheme.grey300; // Disabled color
+              }
+              return appTheme.cyan500; // Regular color
+            },
+          ),
+          foregroundColor: MaterialStateProperty.all<Color>(appTheme.whiteA700),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(22.h),
+            ),
+          ),
+          // You can add shadow, elevation, textStyle, etc.
+        ),
+      ),
       radioTheme: RadioThemeData(
           fillColor: MaterialStateColor.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
@@ -71,7 +91,8 @@ class ThemeHelper {
             return colorScheme.onSurface;
           }),
           visualDensity: const VisualDensity(vertical: -4, horizontal: -4)),
-      dividerTheme: DividerThemeData(thickness: 11, space: 11, color: appTheme.grey900),
+      dividerTheme:
+          DividerThemeData(thickness: 11, space: 11, color: appTheme.grey900),
       appBarTheme: AppBarTheme(
         centerTitle: true,
         titleTextStyle: TextThemes.textTheme(colorScheme).titleMedium,
@@ -82,9 +103,11 @@ class ThemeHelper {
         style: TextButton.styleFrom(
           foregroundColor: appTheme.cyan500,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4), // Rounded Corners for Button
+            borderRadius:
+                BorderRadius.circular(4), // Rounded Corners for Button
           ),
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Button Padding
+          padding: EdgeInsets.symmetric(
+              vertical: 8.0, horizontal: 16.0), // Button Padding
         ),
       ),
 
@@ -118,32 +141,90 @@ class ThemeHelper {
 /// Class containing the supported text theme styles.
 class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
-        bodyLarge:
-            TextStyle(color: appTheme.whiteA700, fontSize: 18.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
-        bodyMedium:
-            TextStyle(color: appTheme.teal500, fontSize: 14.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
-        bodySmall:
-            TextStyle(color: appTheme.whiteA700, fontSize: 10.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
-        displaySmall:
-            TextStyle(color: Color(0XFFFFFFFF), fontSize: 36.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
-        headlineLarge:
-            TextStyle(color: appTheme.grey900, fontSize: 33.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w700),
-        headlineSmall:
-            TextStyle(color: appTheme.whiteA700, fontSize: 24.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-        labelLarge:
-            TextStyle(color: appTheme.teal500, fontSize: 13.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-        labelMedium:
-            TextStyle(color: appTheme.teal500, fontSize: 10.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-        labelSmall:
-            TextStyle(color: appTheme.grey500, fontSize: 9.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w700),
-        titleLarge:
-            TextStyle(color: appTheme.whiteA700, fontSize: 22.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
-        titleMedium:
-            TextStyle(color: appTheme.whiteA700, fontSize: 18.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-        titleSmall:
-            TextStyle(color: appTheme.whiteA700, fontSize: 14.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-        displayMedium:
-            TextStyle(color: appTheme.grey100, fontSize: 20.fSize, fontFamily: 'Roboto', fontWeight: FontWeight.w400),
+        // Used for large text in dialogs or cards, like titles or important text.
+        bodyLarge: TextStyle(
+          color: appTheme.grey100, // Bright text for dark backgrounds
+          fontSize: 20.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500, // Medium weight for importance
+        ),
+        // Used for regular paragraphs and content.
+        bodyMedium: TextStyle(
+          color: appTheme.grey500, // Standard text color
+          fontSize: 14.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.normal,
+        ),
+        // Used for less important, smaller text like captions or hints.
+        bodySmall: TextStyle(
+          color: appTheme.grey300, // Less prominent text
+          fontSize: 12.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.normal,
+        ),
+        // Used for titles or section headings.
+        headlineLarge: TextStyle(
+          color: appTheme.cyan500, // Primary accent color for visibility
+          fontSize: 24.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.bold, // Bold for headings
+        ),
+        // Used for subheadings or titles in smaller widgets.
+        headlineSmall: TextStyle(
+          color: appTheme.cyan500, // Primary accent color for consistency
+          fontSize: 20.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500, // Medium weight for subheadings
+        ),
+        // Used for labels on form fields or buttons.
+        labelLarge: TextStyle(
+          color: appTheme.teal500,
+          // Accent color to highlight interactive elements
+          fontSize: 16.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500, // Medium weight to denote action
+        ),
+        // Used for secondary information related to labels.
+        labelMedium: TextStyle(
+          color: appTheme.teal100, // Softer accent color
+          fontSize: 14.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.normal,
+        ),
+        // Used for titles on large screens or important widgets.
+        titleLarge: TextStyle(
+          color: appTheme.grey100,
+          // White text for contrast against primary color
+          fontSize: 22.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.bold, // Bold for large titles
+        ),
+        // Used for titles within content like cards or list tiles.
+        titleMedium: TextStyle(
+          color: appTheme.whiteA700, // White text for readability
+          fontSize: 18.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500, // Medium weight for content titles
+        ),
+        // Used for smaller titles within the interface or on buttons.
+        titleSmall: TextStyle(
+          color: appTheme.whiteA700, // White text to maintain readability
+          fontSize: 16.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w500, // Medium weight for small titles
+        ),
+        // Used for large display numbers or words, like statistics or dashboard numbers.
+        displayMedium: TextStyle(
+          color: appTheme.whiteA700, // Bright, visible text for stats
+          fontSize: 36.fSize,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.bold, // Bold for large display text
+        ),
+        labelSmall: TextStyle(
+            color: appTheme.grey500,
+            fontSize: 9.fSize,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w700),
       );
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'backend/notification_controller.dart';
 import 'core/app_export.dart';
 import 'package:provider/provider.dart';
@@ -88,32 +89,13 @@ void main() async {
 class MyApp extends StatefulWidget {
   // With the navigator key, you can redirect pages and get context even inside static classes.
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  bool isFirstVisit = true;
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (BuildContext context) => AppState()),
-        ChangeNotifierProvider(create: (BuildContext context) => MedicationProvider()),
-      ],
-      child: Sizer(
-        builder: (context, orientation, deviceType) {
-          return MaterialApp(
-            theme: theme,
-            title: 'pillmate',
-            debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.homescreenPage,
-            routes: AppRoutes.routes,
-          );
-        },
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -125,5 +107,41 @@ class _MyAppState extends State<MyApp> {
         onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
 
     super.initState();
+    _checkFirstVisit();
+  }
+
+  Future<void> _checkFirstVisit() async {
+    final prefs = await SharedPreferences.getInstance();
+    widget.isFirstVisit = prefs.getBool('isFirstVisit') ?? true;
+
+    if (widget.isFirstVisit) {
+      await prefs.setBool('isFirstVisit', false);
+      widget.isFirstVisit = false;
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (BuildContext context) => AppState()),
+        ChangeNotifierProvider(create: (BuildContext context) => MedicationProvider()),
+      ],
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MaterialApp(
+            theme: theme,
+            title: 'pillmate',
+            debugShowCheckedModeBanner: false,
+            initialRoute: widget.isFirstVisit ? AppRoutes.onboardingScreen : AppRoutes.homescreenPage,
+            routes: AppRoutes.routes,
+          );
+        },
+      ),
+    );
   }
 }
