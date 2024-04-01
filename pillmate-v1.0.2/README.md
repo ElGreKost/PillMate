@@ -1,4 +1,4 @@
-
+send notification when app hasn't been opened manually(I.e. open on startup)
 # pillmate
 ### Table of contents
 - [System requirements](#system-requirements)
