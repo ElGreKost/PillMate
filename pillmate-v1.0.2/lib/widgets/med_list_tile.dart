@@ -558,7 +558,8 @@ class _MedListTileState extends State<MedListTile> {
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        primary: appTheme.cyan500,
+                        backgroundColor: appTheme.cyan500,
+                        // primary: appTheme.cyan500, deprecation?
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.h),
                         ),
