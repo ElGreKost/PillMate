@@ -6,8 +6,16 @@
       <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.1/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.1/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.1/build" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.2/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.2/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate-v1.0.2/build" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate_v2/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate_v2/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/pillmate_v2/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
