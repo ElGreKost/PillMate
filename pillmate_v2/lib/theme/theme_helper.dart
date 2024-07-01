@@ -258,7 +258,6 @@ class PrimaryColors {
   Color get grey100 => HSLColor.fromAHSL(1.0, 220, 0.6, 0.80).toColor(); //
 
   Color get whiteA700 => HSLColor.fromAHSL(1.0, 0, 0.0, 1.0).toColor(); //
-  Color get white100 => HSLColor.fromAHSL(1.0, 0, 0.0, 0.95).toColor(); //
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();

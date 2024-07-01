@@ -34,9 +34,9 @@ class AppbarTitleButton extends StatelessWidget {
             print(prefs.getBool('isFirstVisit'));
 
             // Clear Hive box
-            final Box medicationsBox = await Hive.openBox('medications');
-            await medicationsBox.clear();
-            print('Hive box cleared');
+            // final Box medicationsBox = await Hive.openBox('medications');
+            // await medicationsBox.clear();
+            // print('Hive box cleared');
           },
         ),
       ),

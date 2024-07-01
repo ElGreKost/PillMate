@@ -43,6 +43,16 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    // So that we compile only the correct versions in each device.
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            universalApk false
+        }
+    }
 }
 
 flutter {

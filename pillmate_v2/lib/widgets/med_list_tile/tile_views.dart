@@ -10,6 +10,7 @@ import '../../services/notifications_scheduler.dart';
 import 'tile_utils.dart';
 import 'tile_manager.dart';
 
+
 class DefaultView extends StatelessWidget {
   final Medication medication;
   final double fillRatio;
@@ -150,43 +151,46 @@ class LongPressView extends StatelessWidget {
   }
 
   FutureBuilder _buildMedicationInfo(BuildContext context) {
-    return FutureBuilder<String>(
-      future: searchMedication(medication.name),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _fetchMedicationData(), // Assuming this function fetches the medication data
+      builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(color: Colors.cyan),
           );
         } else {
-          return Container(
-            decoration: BoxDecoration(
-              color: appTheme.whiteA700,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.h),
-                topRight: Radius.circular(20.h),
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            final data = snapshot.data!;
+            final tabKeys = data.keys.toList();
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              decoration: BoxDecoration(
+                color: appTheme.grey900,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.h),
+                  topRight: Radius.circular(20.h),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(16.h),
-              child: SingleChildScrollView(
+              child: DefaultTabController(
+                length: tabKeys.length,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Detailed Medication Information",
-                      style: TextStyle(
-                        fontSize: 20.h,
-                        fontWeight: FontWeight.bold,
-                        color: appTheme.cyan500,
+                    TabBar(
+                      isScrollable: true,
+                      labelColor: appTheme.cyan500,
+                      unselectedLabelColor: appTheme.whiteA700,
+                      indicatorColor: appTheme.cyan500,
+                      tabs: tabKeys.map((key) => Tab(text: key)).toList(),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: tabKeys.map((key) => _buildTabContent(key, data[key])).toList(),
                       ),
                     ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      snapshot.data ?? 'No data available',
-                      style: TextStyle(fontSize: 14.h, color: appTheme.grey900),
-                    ),
-                    SizedBox(height: 20.h),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
@@ -203,12 +207,53 @@ class LongPressView extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          );
+            );
+          }
         }
       },
     );
   }
+
+  Widget _buildTabContent(String title, String content) {
+    return Padding(
+      padding: EdgeInsets.all(16.h),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20.h,
+                fontWeight: FontWeight.bold,
+                color: appTheme.cyan500,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Text(
+              content ?? 'No data available',
+              style: TextStyle(fontSize: 14.h, color: appTheme.grey100),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // todo Yiannis bring here the data from firestore
+  Future<Map<String, dynamic>> _fetchMedicationData() async {
+    // Simulate fetching data
+    await Future.delayed(Duration(seconds: 2));
+    return {
+      'Usage': 'Use this medication as prescribed by your doctor.',
+      'Purpose': 'This medication is used to relieve pain.',
+      'Do Not Use': 'Do not use this medication if you are allergic to it.',
+      'Warnings': 'Consult your doctor if you experience any side effects.',
+      'Add more here': 'Consult your doctor if you experience any side effects.',
+    };
+  }
+
+
 }
 
 class ExpandedView extends StatelessWidget {
